@@ -2,6 +2,7 @@
 const db = require('../database/db_connect');
 const modeler = require('../utils/modeler');
 const config = require('../../config');
+const Thrower = require('../utils/thrower.js');
 
 const { promisify } = require('util');
 const bcrypt = require('bcrypt-nodejs');
@@ -21,7 +22,7 @@ class User {
                     test: (x, _) => !(x.match(/[^a-zA-Z0-9_]/)),
                     message: 'Username should only contain letters (lower or uppercase), numbers, and underscores (_).'
                 }, {
-                    test: async (x, _) => !(this.exists('username', x)),
+                    test: async (x, _) => !(await this.exists('username', x)),
                     message: 'Username already exists.'
                 }]
             },
@@ -62,7 +63,7 @@ class User {
         // Validation checks
         creationObj = this.validate.clean(creationObj);
         const validation = await this.validate.all(creationObj);
-        if (validation) throw Error.thrower({ public: validation, status: 401 });
+        if (validation) throw new Thrower(validation, { status: 401 });
 
         // Hash password
         creationObj.hash = await hashAsync(
@@ -79,9 +80,7 @@ class User {
         try {
             return await this.getOneBy('username', creationObj.username);
         } catch (err) {
-            throw Error.thrower({
-                public: 'User was registered but there was an error retrieving the user data.'
-            }, err);
+            throw new Thrower('User was registered but there was an error retrieving the user data', { err: err });
         }
     }
 

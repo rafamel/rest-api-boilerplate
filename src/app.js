@@ -11,7 +11,7 @@ const passport = require('passport');
 
 const config = require('../config');
 const routes = require('./routes');
-const errors = require('./errors');
+const error = require('./middlewares/error');
 
 const app = express(); // Initialize Express
 
@@ -22,17 +22,12 @@ app.use(compress()); //Gzip compression
 app.use(helmet()); // Secure headers
 app.use(cors()); // Enable CORS
 
-// app.use(passport.initialize());
-// passport.use('jwt', strategies.jwt);
-// passport.use('facebook', strategies.facebook);
-// passport.use('google', strategies.google);
-
 // Routes
-app.use(routes);
+app.use('/v1', routes);
 
-// Errors
-errors.thrower();
-errors.handle(app);
+// Error handling
+app.use(error.notFound);
+app.use(error.handler);
 
 app.listen(config.port, () => {
     console.log('App running on port', config.port);

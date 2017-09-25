@@ -6,7 +6,7 @@ const db = require('./db_connect');
 const buildScript = String(fs.readFileSync(path.join(__dirname, 'db_build.sql')));
 db.q.result(buildScript)
     .then(console.log)
-    .catch(e => {
+    .catch(err => {
         console.log('Error');
-        throw e;
+        throw err;
     });
