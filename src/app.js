@@ -16,11 +16,16 @@ const error = require('./middlewares/error');
 const app = express(); // Initialize Express
 
 app.use(morgan(config.logs)); // Logger
-app.use(bodyParser.json()); // Parser
-app.use(bodyParser.urlencoded({ extended: false })); // Parser
+app.use(bodyParser.json()); // JSON parser
+app.use(bodyParser.urlencoded({ extended: false })); // Form-urlencoded parser
 app.use(compress()); //Gzip compression
 app.use(helmet()); // Secure headers
 app.use(cors()); // Enable CORS
+
+// app.use(passport.initialize());
+// passport.use('jwt', strategies.jwt);
+// passport.use('facebook', strategies.facebook);
+// passport.use('google', strategies.google);
 
 // Routes
 app.use('/v1', routes);

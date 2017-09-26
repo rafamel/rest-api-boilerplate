@@ -1,11 +1,11 @@
 'use strict';
 
-class Thrower extends Error {
+class PublicError extends Error {
     constructor(announce, { status, err }) {
         const wasError = (err instanceof Error);
-        const wasThrower = (err instanceof Thrower);
+        const wasPublicError = (err instanceof PublicError);
 
-        if (wasThrower) {
+        if (wasPublicError) {
             // Inherit first `Thrower` announce and status (override following)
             announce = err.announce;
             status = err.status;
@@ -15,8 +15,8 @@ class Thrower extends Error {
         this.announce = announce || 'An error has occurred';
         this.status = (Number.isInteger(status)) ? status : 500;
         this.trace = null;
-        if (wasError) this.trace = (wasThrower) ? err.trace : err;
+        if (wasError) this.trace = (wasPublicError) ? err.trace : err;
     }
 }
 
-module.exports = Thrower;
+module.exports = PublicError;

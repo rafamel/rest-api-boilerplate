@@ -9,7 +9,7 @@ Express 4, PostgreSQL, Bcrypt, Passport (token based). Built for API development
 - CORS enabled
 - `helmet` for additional HTTP headers security
 - Logging with morgan
-<!-- - Gzip compression -->
+- Gzip compression
 - Linting with `eslint`
 - Ad-hoc validation, with `validator` under the hood
 - Ad-hoc simple error handling
