@@ -1,4 +1,5 @@
 'use strict';
+const config = require('../../config');
 const PublicError = require('../utils/public-error.js');
 
 module.exports = {
@@ -10,7 +11,10 @@ module.exports = {
         if (err.isFlowi) {
             if (err.isExplicit || err.label) {
                 err = new PublicError(err.message, { status: 400 });
-            } else err = new PublicError('Bad Request', { status: 400 });
+            } else {
+                if (!config.production) console.error(err);
+                err = new PublicError('Bad Request', { status: 400 });
+            }
         } else if (!(err instanceof PublicError)) {
             err = new PublicError(null, { err: err });
         }

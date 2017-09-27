@@ -1,7 +1,6 @@
 'use strict';
 const config = require('../../../config');
 const db = require('../../database/db_connect');
-const modeler = require('../../utils/modeler');
 const PublicError = require('../../utils/public-error');
 
 const Joi = require('joi');
