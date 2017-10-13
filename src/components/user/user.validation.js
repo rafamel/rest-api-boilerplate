@@ -1,11 +1,9 @@
 'use strict';
 const Joi = require('joi');
-const { flow:Flow, keyFlow:KeyFlow } = require('../../utils/flowi');
-const PublicError = require('../../utils/public-error');
-const User = require('./user.model');
+const { Flow, KeyFlow } = require('flowi');
 
-const schema =
-    KeyFlow({
+const schema = KeyFlow()
+    .and({
         username: Flow()
             .and(Joi.string().min(6).max(16), 'Username should have a length of 6 to 16 characters.')
             .and(Joi.string().regex(/^[a-zA-Z0-9_]+$/), 'Username should only contain letters, numbers, and underscores (_).'),
@@ -14,22 +12,16 @@ const schema =
             .and(Joi.string().regex(/^[a-zA-Z0-9_]+$/), 'Password should only contain letters, numbers, and underscores (_).')
             .and(Joi.string().regex(/[a-zA-Z]/), 'Password should contain some letters.'),
         email: Joi.string().email(),
-    })
-    .labels({ username: 'Username', email: 'Email', password: 'Password'});
+    }).labels({ username: 'Username', email: 'Email', password: 'Password'});
 
 module.exports = {
     index: {
 
     },
     show: {
-        body:
-            KeyFlow(schema)
-            .require(['username', 'password'])
-            .forbid(['email'])
+        body: KeyFlow(schema).use(['username', 'password']).require()
     },
     create: {
-        body:
-            KeyFlow(schema)
-            .require(['username', 'password', 'email'])
+        body: KeyFlow(schema).require()
     }
 };

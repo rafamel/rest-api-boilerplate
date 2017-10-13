@@ -16,7 +16,7 @@ module.exports = {
     },
     auth: {
         jwtSecret: process.env.JWT_SECRET || randtoken.generate(40),
-        jwtSaltWorkFactor: process.env.JWT_SALT_WORK_FACTOR || 8,
+        jwtSaltWorkFactor: process.env.JWT_SALT_WORK_FACTOR || 10,
         jwtAlgorithm: process.env.JWT_ALGORITHM || 'HS256',
         jwtMaxAge: process.env.JWT_MAX_AGE || '30d'
     }

@@ -1,11 +1,17 @@
 'use strict';
 const router = require('express').Router();
 const validate = require('./middlewares/flowi-request');
+const authorize = require('./middlewares/auth').authorize;
 const UserController = require('./components/user/user.controller');
 const UserValidation = require('./components/user/user.validation');
 
 // Authentication
-router.get('/auth', validate(UserValidation.index), UserController.index);
+router.get('/auth',
+    authorize,
+    validate(UserValidation.index),
+    UserController.index
+);
+
 router.post('/auth/login', validate(UserValidation.show), UserController.show);
 router.post('/auth/register', validate(UserValidation.create), UserController.create);
 

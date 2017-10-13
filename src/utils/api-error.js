@@ -1,9 +1,9 @@
 'use strict';
 
-class PublicError extends Error {
+class APIError extends Error {
     constructor(announce, { status, err }) {
         const wasError = (err instanceof Error);
-        const wasPublicError = (err instanceof PublicError);
+        const wasPublicError = (err instanceof APIError);
 
         if (wasPublicError) {
             // Inherit first `Thrower` announce and status (override following)
@@ -19,4 +19,8 @@ class PublicError extends Error {
     }
 }
 
-module.exports = PublicError;
+module.exports = new Proxy(APIError, {
+    apply(Target, thisArg, args) {
+        return new Target(...args);
+    }
+});

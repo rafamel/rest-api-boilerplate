@@ -1,7 +1,7 @@
 'use strict';
 const config = require('../../../config');
 const db = require('../../database/db_connect');
-const PublicError = require('../../utils/public-error');
+const APIError = require('../../utils/api-error');
 
 const Joi = require('joi');
 const { promisify } = require('util');
@@ -18,9 +18,9 @@ class User {
 
         // Check existance
         if (await this.exists('username', creationObj.username)) {
-            throw new PublicError('Username already exists', { status: 401 });
+            throw new APIError('Username already exists', { status: 401 });
         } else if (await this.exists('email', creationObj.email)) {
-            throw new PublicError('Email already exists', { status: 401 });
+            throw new APIError('Email already exists', { status: 401 });
         }
 
         // Hash password
@@ -38,7 +38,7 @@ class User {
         try {
             return await this.getOneBy('username', creationObj.username);
         } catch (err) {
-            throw new PublicError(
+            throw new APIError(
                 'User was registered but there was an error retrieving the user data',
                 { err: err }
             );

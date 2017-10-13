@@ -1,6 +1,10 @@
+// npm i --save-dev eslint-config-standard eslint-plugin-import eslint-plugin-node eslint-plugin-promise eslint-plugin-standard
 module.exports = {
-    "extends": "standard",
-    "rules": {
+    extends: 'standard',
+    env: {
+      node: true
+    },
+    rules: {
         // Indentation
         "indent": [ 2, 4 ],
         // Semicolons
