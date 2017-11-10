@@ -1,5 +1,5 @@
 'use strict';
-const APIError = require('../utils/api-error.js');
+const APIError = rootRequire('utils/api-error');
 const passport = require('passport');
 
 module.exports = {

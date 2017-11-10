@@ -1,0 +1,245 @@
+#%RAML 1.0
+title: "Tasks API"
+description: "An API for managing a list of tasks that need to be done. \n\nDon't\
+  \ forget to take it for a spin by clicking on the **Try in Client** button next\
+  \ to each operation! All read operations are public and don't require authentication.\n"
+version: "1.1.0"
+protocols:
+- "HTTPS"
+baseUri: "https://tasksapi.restlet.net/v1"
+mediaType:
+- "application/json"
+types:
+  Task:
+    type: "object"
+    description: "An object that represents a Task."
+    properties:
+      id:
+        type: "string"
+        description: "Auto-generated primary key field"
+        example: "3fa2eb40-b61c-11e6-9de0-fdbe71bceebb"
+      name:
+        type: "string"
+        example: "Figure out how to colonize Mars"
+      completed:
+        type: "boolean"
+      createdAt:
+        type: "string"
+        required: false
+        example: "2016.10.06"
+    example:
+      value: "{\n  \"id\": \"47ee3550-b619-11e6-8408-0bdb025a7cfa\",\n  \"name\":\
+        \ \"Feed the fish\",\n  \"completed\": false,\n  \"createdAt\": \"2016.07.03\"\
+        \n}"
+      strict: false
+  Error:
+    type: "object"
+    description: "This general error structure is used throughout this API."
+    properties:
+      code:
+        type: "integer"
+        minimum: 400
+        maximum: 599
+      description:
+        type: "string"
+        required: false
+        examples:
+          example: "Bad query parameter [$size]: Invalid integer value [abc]"
+          example1: "The server understood the request, but is refusing to fulfill\
+            \ it"
+      reasonPhrase:
+        type: "string"
+        required: false
+        examples:
+          example: "Bad Request"
+          example1: "Forbidden"
+    example:
+      value: "{\n  \"code\": 400,\n  \"description\": \"Bad query parameter [$size]:\
+        \ Invalid integer value [abc]\",\n  \"reasonPhrase\": \"Bad Request\"\n}"
+      strict: false
+securitySchemes:
+  Custom:
+    type: "x-custom"
+    describedBy:
+      headers:
+        Authorization:
+          type: "string"
+          description: "Bearer"
+          required: false
+          example: "Bearer eyJhbGciOiJIAzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxOCwidXNlcm5hbWUiOiJqdWFzZGZzZDc4IiwiZW1haWwiOiJ1c2VybmFtZXhAc2QuY69tIiwiaGFzaCI6IiQyYSQwOCRmUm9KZWpZLjVaeFh6ekd6U1AwbjZlUmNBZ0ZlV3BMMkNxMno5M0F2VmZtTFJmUnA3aFhXVyJ9LCJpYXQiOjE1MDc5MTU5MTksImV4cCI6MTUxMDUwNzkxOX0.__ShOKHfEDaq9NKPF0GivWiDw-03hveS18xEmZmxvjI"
+/auth:
+  displayName: "Authentication"
+/tasks/:
+  get:
+    displayName: "Load the list of Tasks"
+    queryParameters:
+      $size:
+        type: "integer"
+        description: "Size of the page to retrieve."
+        required: false
+        example: 10
+      $page:
+        type: "integer"
+        description: "Number of the page to retrieve."
+        required: false
+        example: 1
+      $sort:
+        type: "string"
+        description: "Order in which to retrieve the results. Multiple sort criteria\
+          \ can be passed. Example: sort=age ASC,height DESC"
+        required: false
+        examples:
+          example: "createdAt DESC"
+          example1: "name ASC"
+      id:
+        type: "string"
+        description: "Allows to filter the collection of results by the value of field\
+          \ `id`"
+        required: false
+        example: "47ee3550-b619-11e6-8408-0bdb025a7cfa"
+      name:
+        type: "string"
+        description: "Allows to filter the collection of results by the value of field\
+          \ `name`"
+        required: false
+        example: "Learn about hypermedia APIs"
+      createdAt:
+        type: "string"
+        description: "Allows to filter the collection of results by the value of field\
+          \ `createdAt`"
+        required: false
+        example: "2016.07.03"
+      completed:
+        type: "boolean"
+        description: "Allows to filter the collection of results by the value of field\
+          \ `completed`"
+        required: false
+        examples:
+          example: true
+          example1: false
+    responses:
+      200:
+        description: "Status 200"
+        headers:
+          X-Page-Count:
+            type: "integer"
+            required: false
+            example: 1
+          X-Page-Number:
+            type: "integer"
+            required: false
+            example: 1
+          X-Page-Size:
+            type: "integer"
+            required: false
+            example: 25
+          X-Total-Count:
+            type: "integer"
+            required: false
+            example: 2
+        body:
+          type: "array"
+          items:
+            type: "Task"
+          example:
+            value: "[{\n  \"id\": \"47ee3550-b619-11e6-8408-0bdb025a7cfa\",\n  \"\
+              name\": \"Feed the fish\",\n  \"completed\": false,\n  \"createdAt\"\
+              : \"2016.07.03\"\n}]"
+            strict: false
+      400:
+        description: "Status 400"
+        body:
+          type: "Error"
+  post:
+    displayName: "Create a new Task"
+    body:
+      type: "Task"
+      example:
+        value: "{\n  \"name\": \"Feed the fish\",\n  \"completed\": false,\n  \"createdAt\"\
+          : \"2016.07.03\"\n}"
+        strict: false
+    responses:
+      200:
+        description: "Status 200"
+        body:
+          type: "Task"
+          example:
+            value: "{\n  \"id\": \"47ee3550-b619-11e6-8408-0bdb025a7cfa\",\n  \"name\"\
+              : \"Feed the fish\",\n  \"completed\": false,\n  \"createdAt\": \"2016.07.03\"\
+              \n}"
+            strict: false
+/tasks/{taskid}:
+  uriParameters:
+    taskid:
+      type: "string"
+      description: "Identifier of the Task"
+      required: false
+      example: "47ee3550-b619-11e6-8408-0bdb025a7cfa"
+  get:
+    displayName: "Load a specific Task"
+    responses:
+      200:
+        description: "Status 200"
+        body:
+          type: "Task"
+          example:
+            value: "{\n  \"id\": \"47ee3550-b619-11e6-8408-0bdb025a7cfa\",\n  \"name\"\
+              : \"Feed the fish\",\n  \"completed\": false,\n  \"createdAt\": \"2016.07.03\"\
+              \n}"
+            strict: false
+      400:
+        description: "Status 400"
+        body:
+          type: "Error"
+  put:
+    displayName: "Update a Task"
+    body:
+      type: "Task"
+      example:
+        value: "{\n  \"name\": \"Feed the fish\",\n  \"completed\": false,\n  \"createdAt\"\
+          : \"2016.07.03\"\n}"
+        strict: false
+    responses:
+      200:
+        description: "Status 200"
+        body:
+          type: "Task"
+          example:
+            value: "{\n  \"id\": \"47ee3550-b619-11e6-8408-0bdb025a7cfa\",\n  \"name\"\
+              : \"Feed the fish\",\n  \"completed\": false,\n  \"createdAt\": \"2016.07.03\"\
+              \n}"
+            strict: false
+  delete:
+    displayName: "Delete a Task"
+    responses:
+      200:
+        description: "Status 200"
+/auth/refresh:
+  post:
+    displayName: "Refresh Token"
+    body:
+      application/json:
+        type: "object"
+        properties:
+          accessToken:
+            type: "string"
+            required: false
+          refreshToken:
+            type: "string"
+            required: false
+    responses:
+      200:
+        body:
+          type: "object"
+          properties:
+            status:
+              type: "string"
+              description: "success"
+              required: false
+            data:
+              type: "object"
+              required: false
+              properties:
+                token:
+                  type: "string"
+                  required: false

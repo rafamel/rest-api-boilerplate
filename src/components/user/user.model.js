@@ -1,71 +1,76 @@
 'use strict';
-const config = require('../../../config');
-const db = require('../../database/db_connect');
-const APIError = require('../../utils/api-error');
-
-const Joi = require('joi');
+const path = require('path');
+const { Model, ParentModel } = rootRequire('db/ParentModel');
+const APIError = rootRequire('utils/api-error');
+const config = rootRequire('config');
 const { promisify } = require('util');
 const bcrypt = require('bcrypt-nodejs');
 const genSaltAsync = promisify(bcrypt.genSalt);
 const hashAsync = promisify(bcrypt.hash);
 const compareAsync = promisify(bcrypt.compare);
 
-class User {
-    constructor() { }
+module.exports = class User extends ParentModel {
+    // Table Name
+    static get tableName() { return 'users'; }
 
-    // Public
-    async create(creationObj) {
-
-        // Check existance
-        if (await this.exists('username', creationObj.username)) {
-            throw new APIError('Username already exists', { status: 401 });
-        } else if (await this.exists('email', creationObj.email)) {
-            throw new APIError('Email already exists', { status: 401 });
-        }
-
-        // Hash password
-        creationObj.hash = await hashAsync(
-            creationObj.password,
-            await genSaltAsync(config.auth.jwtSaltWorkFactor),
-            null
-        );
-        delete creationObj.password;
-
-        // Insert values
-        // eslint-disable-next-line
-        await db.q.query('INSERT INTO users(${columns^}) VALUES (${values^});', db.prep(creationObj));
-
-        try {
-            return await this.getOneBy('username', creationObj.username);
-        } catch (err) {
-            throw new APIError(
-                'User was registered but there was an error retrieving the user data',
-                { err: err }
-            );
-        }
+    // Schema (validation)
+    static get jsonSchema() {
+        return {
+            type: 'object',
+            required: ['username', 'email', 'hash'],
+            properties: {
+                id: { type: 'integer' },
+                username: { type: 'string', minLength: 1, maxLength: 255 },
+                email: { type: 'string', minLength: 1, maxLength: 255 },
+                hash: { type: 'string', minLength: 1, maxLength: 255 }
+            }
+        };
     }
 
-    async get(id) {
-        return db.q.oneOrNone(`SELECT * FROM users WHERE id='${id}';`);
+    // Associations
+    static get relationMappings() {
+        return {
+            refreshTokens: {
+                relation: Model.HasManyRelation,
+                modelClass: path.join(__dirname, '../auth/auth.model'),
+                join: {
+                    from: 'users.id',
+                    to: 'refresh_token.user_id'
+                }
+            }
+        };
     }
 
-    async getAll() {
-        return db.q.query(`SELECT * FROM users;`);
+    // Class Methods
+    static get method() {
+        return {
+            existCheck: async (creationObj) => {
+                if (!(await this.isCaseInsensitiveUnique('username', creationObj.username))) {
+                    throw new APIError('Username already exists', { status: 400 });
+                } else if (!await this.isCaseInsensitiveUnique('email', creationObj.email)) {
+                    throw new APIError('Email already exists', { status: 400 });
+                }
+            },
+            create: async (creationObj) => {
+                // Check existance
+                await this.method.existCheck(creationObj);
+
+                // Hash password
+                creationObj.hash = await hashAsync(
+                    creationObj.password,
+                    await genSaltAsync(config.auth.jwtSaltWorkFactor),
+                    null
+                );
+                delete creationObj.password;
+
+                // Insert values
+                return this.query().insert(creationObj).returning('*');
+            }
+        };
     }
 
-    // Private
-    async getOneBy(field, value) {
-        return db.q.oneOrNone(`SELECT * FROM users WHERE ${field}='${value}'`);
+    // Instance Methods
+    isPassword(password) {
+        return compareAsync(password, this.hash);
     }
-
-    async exists(field, value) {
-        const data = await db.q.query(`SELECT * FROM users WHERE ${field}='${value}';`);
-        return Boolean(data.length);
-    }
-
-    async comparePassword(userRow, password) {
-        return compareAsync(password, userRow.hash);
-    }
-}
-
-module.exports = new User();
+};

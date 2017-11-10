@@ -5,32 +5,40 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "./node_modules/nodemon/bin/nodemon.js src/app.js --exec 'npm run lint && node'",
-    "lint": "./node_modules/.bin/eslint src/**/*.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "db-build": "node src/database/db_build.js"
+    "dev": "nodemon ./node_modules/.bin/run-s lint start",
+    "lint": "eslint ./src --ext .js",
+    "lint:test": "eslint ./test --ext .js",
+    "lint:md": "markdownlint *.md --config markdown.json",
+    "test": "npm run lint:test && jest ./test/.*.test.js --runInBand --verbose",
+    "checks": "run-s lint lint:* && jest ./test/.*.test.js && npm outdated",
+    "build:db": "node src/database/db_build.js",
+    "build:docs": "echo \"Error: no command specified\" && exit 1",
+    "update:packages": "rm -rf node_modules && rm package-lock.json && npm update --save/save-dev && npm install && npm outdated"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "axios": "^0.16.2",
+    "axios": "^0.17.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "compression": "^1.7.1",
     "cors": "^2.8.4",
     "dotenv-safe": "^4.0.4",
-    "express": "^4.16.1",
-    "flowi": "^0.3.0",
-    "helmet": "^3.8.2",
-    "joi": "^11.3.3",
+    "express": "^4.16.2",
+    "flowi": "^0.4.0",
+    "helmet": "^3.9.0",
+    "joi": "^13.0.1",
     "jsonwebtoken": "^8.1.0",
+    "knex": "^0.14.0",
+    "moment": "^2.19.1",
     "morgan": "^1.9.0",
+    "ms": "^2.0.0",
+    "objection": "^0.9.0",
     "passport": "^0.4.0",
     "passport-http-bearer": "^1.0.1",
-    "passport-jwt": "^3.0.0",
-    "pg-promise": "^6.10.3",
-    "rand-token": "^0.3.0",
-    "validator": "^8.2.0"
+    "passport-jwt": "^3.0.1",
+    "pg": "^7.4.0",
+    "rand-token": "^0.4.0"
   },
   "devDependencies": {
     "eslint": "^4.8.0",
@@ -39,6 +47,9 @@
     "eslint-plugin-node": "^5.2.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
-    "nodemon": "^1.12.1"
+    "jest-cli": "^21.2.1",
+    "markdownlint-cli": "^0.4.1",
+    "nodemon": "^1.12.1",
+    "npm-run-all": "^4.1.1"
   }
 }
