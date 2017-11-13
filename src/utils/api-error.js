@@ -1,7 +1,8 @@
 'use strict';
 
 class APIError extends Error {
-    constructor(announce, { status, err, type }) {
+    constructor(announce, options = {}) {
+        let { status, err, type } = options;
         const wasError = (err instanceof Error);
         const wasAPIError = (err instanceof APIError);
 

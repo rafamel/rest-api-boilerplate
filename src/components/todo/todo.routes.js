@@ -1,29 +1,29 @@
 'use strict';
 const router = require('express').Router();
-const APIError = rootRequire('utils/api-error');
 const { KeyFlow } = require('flowi');
 const fwr = rootRequire('middlewares/flowi-request');
 const { authorize } = rootRequire('middlewares/auth');
-const controller = require('./user.controller');
-const reqSchema = require('../user/user.model').reqSchema;
-
-const verifyUser = (req, res, next) => {
-    if (req.user.id !== Number(req.params.id)) {
-        return next(new APIError(`You don't have access to this resource`, { status: 401 }));
-    }
-    next();
-};
+const controller = require('./todo.controller');
+const Todo = require('./todo.model');
+const reqSchema = Todo.reqSchema;
 
 const validate = {
+    createUpdate: {
+        body: KeyFlow(reqSchema).require(['name'])
+    },
     patch: {
-        body: KeyFlow(reqSchema).require(true, 1)
+        body: KeyFlow(reqSchema)
+            .require(true, 1)
     }
 };
 
-// User - /user
-router.get('/:id', authorize(), verifyUser, controller.show);
-router.patch('/:id', fwr(validate.patch), authorize(), verifyUser, controller.patch);
-router.delete('/:id', authorize(), verifyUser, controller.delete);
+// Auth - /auth
+router.get('/', authorize(), controller.index);
+router.get('/:id', authorize(), controller.show);
+router.post('/', fwr(validate.createUpdate), authorize(), controller.create);
+router.put('/:id', fwr(validate.createUpdate), authorize(), controller.update);
+router.patch('/:id', fwr(validate.patch), authorize(), controller.patch);
+router.delete('/:id', authorize(), controller.delete);
 
 module.exports = router;
 

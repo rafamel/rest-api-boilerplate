@@ -1,6 +1,7 @@
 'use strict';
 const APIError = require('./utils/api-error');
 const Delivery = require('./utils/delivery');
+const Model = require('objection').Model;
 const config = require('./config');
 
 const schemes = {
@@ -40,7 +41,8 @@ function handler(appOrRouter, scheme) {
             },
             (err, req, res, next) => {
                 // Data delivery and error handler
-                if (err instanceof Delivery) {
+                // eslint-disable-next-line
+                if (err instanceof Delivery && err.data != undefined) {
                     return scheme.data(req, res, err);
                 }
                 if (err.isFlowi) {
@@ -49,6 +51,16 @@ function handler(appOrRouter, scheme) {
                     } else {
                         if (!config.production) console.error(err);
                         err = new APIError('Bad Request', { status: 400 });
+                    }
+                } else if (err instanceof Model.ValidationError) {
+                    const key = Object.keys(err.data)[0];
+                    err = err.data[key][0];
+                    if (err.keyword === 'unique') {
+                        // Public
+                        err = new APIError(err.message, { status: 400 });
+                    } else {
+                        // Non Public
+                        err = new APIError(err.message, { status: 500 });
                     }
                 } else if (!(err instanceof APIError)) {
                     err = new APIError(null, { err: err });

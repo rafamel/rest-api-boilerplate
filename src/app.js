@@ -13,7 +13,7 @@ const cors = require('cors');
 // TODO: passport with OAuth2, sequelize, user
 // component / remove / update user, refresh token to id+refresh
 
-// requireAt, config
+// rootRequire, config
 require('./utils/rootRequire')(__dirname);
 const config = require('./config');
 
@@ -33,9 +33,9 @@ app.use(cors()); // Enable CORS
 
 // Handler for routes
 const use = require('./handler')(app);
+// API handler for API routes
 use.api('/v1', require('./components/routes'));
-
-// Default handler (for other routes)
+// Default handler for other routes
 use.default();
 
 app.listen(config.port, () => {

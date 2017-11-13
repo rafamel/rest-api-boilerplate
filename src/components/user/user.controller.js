@@ -1,19 +1,23 @@
 'use strict';
-const APIError = rootRequire('utils/api-error');
 const { batchDispatch } = rootRequire('middlewares/dispatch');
+const assertNotNil = rootRequire('utils/assert-not-nil');
 const User = require('./user.model');
-
-// Naming: index, show, create, update, destroy
 
 module.exports = batchDispatch({
     async show(req) {
-        if (req.user.id !== Number(req.params.id)) {
-            throw new APIError(`You don't have access to this resource`, { status: 401 });
-        }
-        return req.user;
+        return assertNotNil(
+            await User.query().findById(req.params.id)
+        );
     },
-    async create(req) {
-        const user = await User.method.create(req.body);
-        return user;
+    async patch(req) {
+        return assertNotNil(
+            await User.query().findById(req.params.id)
+        ).$query().patchAndFetch(req.body);
+    },
+    async delete(req) {
+        const query = await assertNotNil(
+            await User.query().findById(req.params.id)
+        ).$query().delete();
+        return query === 1;
     }
 });
