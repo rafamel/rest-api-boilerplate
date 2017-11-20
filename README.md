@@ -8,11 +8,12 @@
 [![Issues](https://img.shields.io/github/issues/rafamel/-moduleName-.svg)](https://github.com/rafamel/-moduleName-/issues)
 [![License](https://img.shields.io/github/license/rafamel/-moduleName-.svg)](https://github.com/rafamel/-moduleName-/blob/master/LICENSE)
 
-**Express 4, PostgreSQL, Bcrypt, Passport (token based). Built for API development.**
+**Express 4, Objection.js, Bcrypt, Passport (token based). Built for API development.**
 
 ## Stack
 
-- Express 4 / PostgreSQL
+- Express 4
+- Objection.js
 - Uses Async/Await
 
 <!-- - Environment variables via `dotenv` -->

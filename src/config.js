@@ -2,13 +2,27 @@
 const path = require('path');
 const randtoken = require('rand-token');
 const Joi = require('joi');
+
+// Environment variables from file
 require('dotenv-safe').load({
     path: path.join(__dirname, '../config.env'),
     sample: path.join(__dirname, '../config.env.example')
 });
 
-const env = process.env.NODE_ENV || 'development';
+// Validating NODE_ENV as one of
+// 'production', 'development', 'test'
+const env = Joi.attempt(
+    process.env.NODE_ENV,
+    Joi.string()
+        .default('development')
+        .valid(['production', 'development', 'test'])
+        .label('NODE_ENV')
+);
+
+// Helper - Get the right config value for current env
 function forEnv(obj) {
+    // Validate input as object with required 'default'
+    // key and optional 'production', 'development', and 'test' keys
     Joi.assert(
         obj,
         Joi.object().keys({
@@ -18,12 +32,16 @@ function forEnv(obj) {
             test: Joi.any()
         }).requiredKeys(['default'])
     );
+    // Get and return config value
     return obj.hasOwnProperty(env) ? obj[env] : obj.default;
 }
 
 module.exports = {
     production: env === 'production',
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || forEnv({
+        default: 3000,
+        production: 80
+    }),
     logs: forEnv({
         default: 'dev',
         production: 'combined'
@@ -45,11 +63,12 @@ module.exports = {
         jwtAlgorithm: process.env.JWT_ALGORITHM || 'HS256',
         jwtAuthExpiry: forEnv({
             default: '15m',
-            development: '15d'
+            development: '15d',
+            test: '5s'
         }),
-        refreshToken: {
-            expiry: '45d',
-            renewRemaining: '15d'
-        }
+        refreshToken: forEnv({
+            default: { expiry: '45d', renewRemaining: '15d' },
+            test: { expity: '10s', renewRemaining: '5s' }
+        })
     }
 };

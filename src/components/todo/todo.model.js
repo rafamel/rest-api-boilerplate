@@ -1,10 +1,16 @@
 'use strict';
 const path = require('path');
-const { Model, ParentModel } = rootRequire('db/ParentModel');
 const { Joi, Flow, KeyFlow } = require('flowi');
+const { Model, ParentModel } = rootRequire('db/ParentModel');
+const beforeUnique = require('objection-before-and-unique');
+
 const APIError = rootRequire('utils/api-error');
 
-module.exports = class Todo extends ParentModel {
+module.exports = class Todo extends beforeUnique({
+    unique: [
+        { col: 'name', label: 'Name', insensitive: true, for: ['user_id'] }
+    ]
+})(ParentModel) {
     // Table Name
     static get tableName() { return 'todo'; }
 
@@ -30,18 +36,6 @@ module.exports = class Todo extends ParentModel {
         }).labels({ name: 'Todo name' });
     }
 
-    // Assert unique values for fields
-    static get uniqueConstraints() {
-        return [
-            { name: 'name', label: 'Name', insensitive: true, for: ['user_id'] } // , message: `Name already in use` }
-        ];
-    }
-
-    // Checks before insert and update
-    static beforeChecks(newInstance, oldInstance) {
-        // return [ async () => { } ];
-    }
-
     // Associations
     static get relationMappings() {
         return {
@@ -58,10 +52,12 @@ module.exports = class Todo extends ParentModel {
 
     // Class Methods
     static get method() {
-        // return { method: async () => { } };
+        return {
+            // method: async () => { }
+        };
     }
 
-    // InstanceMethods
+    // Instance Methods
     assertOwner(user) {
         if (this.user_id !== user.id) {
             throw new APIError(`You don't have access to this resource.`, { status: 401 });

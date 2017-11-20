@@ -1,7 +1,8 @@
 'use strict';
 const path = require('path');
-const { Model, ParentModel } = rootRequire('db/ParentModel');
 const { Joi, Flow, KeyFlow } = require('flowi');
+const { Model, ParentModel } = rootRequire('db/ParentModel');
+const beforeUnique = require('objection-before-and-unique');
 
 const config = rootRequire('config');
 const { promisify } = require('util');
@@ -10,7 +11,27 @@ const genSaltAsync = promisify(bcrypt.genSalt);
 const hashAsync = promisify(bcrypt.hash);
 const compareAsync = promisify(bcrypt.compare);
 
-module.exports = class User extends ParentModel {
+module.exports = class User extends beforeUnique({
+    before: [async ({ instance }) => {
+        if (instance.password) {
+            instance.hash = await hashAsync(
+                instance.password,
+                await genSaltAsync(config.auth.jwtSaltWorkFactor),
+                null
+            );
+            delete instance.password;
+        }
+    }],
+    schema: Joi.object().keys({
+        hash: Joi.string().min(1).max(255).label('Hash'),
+        password: Joi.any().forbidden(),
+        role: Joi.number().integer().valid(0)
+    }),
+    unique: [
+        { col: 'username', label: 'Username', insensitive: true },
+        { col: 'email', label: 'Email', insensitive: true }
+    ]
+})(ParentModel) {
     // Table Name
     static get tableName() { return 'users'; }
 
@@ -48,32 +69,6 @@ module.exports = class User extends ParentModel {
         });
     }
 
-    // Assert unique values for fields
-    static get uniqueConstraints() {
-        return [
-            { name: 'username', label: 'Username', insensitive: true },
-            { name: 'email', label: 'Email', insensitive: true }
-        ];
-    }
-
-    // Checks before insert and update
-    static beforeChecks(newInstance, oldInstance) {
-        return [
-            async () => {
-                newInstance.hash = await hashAsync(
-                    newInstance.password,
-                    await genSaltAsync(config.auth.jwtSaltWorkFactor),
-                    null
-                );
-                Joi.assert(
-                    newInstance.hash,
-                    Joi.string().min(1).max(255).label('Hash')
-                );
-                delete newInstance.password;
-            }
-        ];
-    }
-
     // Associations
     static get relationMappings() {
         return {
@@ -98,7 +93,9 @@ module.exports = class User extends ParentModel {
 
     // Class Methods
     static get method() {
-        // return { method: async () => { } };
+        return {
+            // method: async () => { }
+        };
     }
 
     // Instance Methods

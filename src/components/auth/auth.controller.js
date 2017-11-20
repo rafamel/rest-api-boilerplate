@@ -1,6 +1,5 @@
 'use strict';
 const APIError = rootRequire('utils/api-error');
-const assertNotNil = rootRequire('utils/assert-not-nil');
 const { batchDispatch } = rootRequire('middlewares/dispatch');
 const Auth = require('./auth.model');
 const User = require('../user/user.model');
@@ -31,10 +30,7 @@ module.exports = batchDispatch({
     },
 
     async refresh(req) {
-        const user = assertNotNil(
-            await User.query().findById(req.body.userId),
-            'User'
-        );
+        const user = await User.query().findById(req.body.userId).notNone();
         const refreshToken = await Auth.method.get(req.body.refreshToken);
         return refreshToken.newAccessToken(user);
     }

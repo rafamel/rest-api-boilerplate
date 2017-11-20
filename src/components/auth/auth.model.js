@@ -1,7 +1,7 @@
 'use strict';
 const path = require('path');
-const { Model, ParentModel } = rootRequire('db/ParentModel');
 const { Joi, Flow, KeyFlow } = require('flowi');
+const { Model, ParentModel } = rootRequire('db/ParentModel');
 
 const APIError = rootRequire('utils/api-error');
 const config = rootRequire('config');
@@ -34,16 +34,6 @@ module.exports = class RefreshToken extends ParentModel {
             userId: Flow(Joi.number().integer().positive()).convert(),
             refreshToken: Joi.string()
         });
-    }
-
-    // Assert unique values for fields
-    static get uniqueConstraints() {
-        // return [{ name: 'name', label: 'Name', insensitive: true }];
-    }
-
-    // Checks before insert and update
-    static beforeChecks(newInstance, oldInstance) {
-        // return [ async () => { } ];
     }
 
     // Associations
@@ -87,7 +77,7 @@ module.exports = class RefreshToken extends ParentModel {
         };
     }
 
-    // InstanceMethods
+    // Instance Methods
     get fullToken() {
         return `${this.id}.${this.token}`;
     }
