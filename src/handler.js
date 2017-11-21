@@ -1,79 +1,94 @@
 'use strict';
 const { APIError, ErrorTypes } = require('./utils/api-error');
-const Delivery = require('./utils/delivery');
 const { ValidationError, NotFoundError } = require('objection').Model;
 const config = require('./config');
 
 const schemes = {
     default: {
-        data(req, res, delivery) {
-            res.send(delivery.data);
+        data(req, res, data) {
+            res.send(data);
         },
-        error(req, res, error) {
-            res.status(error.status)
-                .send(error.message);
+        error(req, res, err) {
+            res.status(err.status)
+                .send(err.message);
         }
     },
     api: {
-        data(req, res, delivery) {
+        data(req, res, data) {
             res.json({
                 status: 'success',
-                data: delivery.data
+                data: data
             });
         },
-        error(req, res, error) {
-            const ans = {
-                status: 'error',
-                message: error.message,
-                type: error.type
+        error(req, res, err) {
+            const error = {
+                message: err.message,
+                type: err.type
             };
-            if (error.notice) ans.notice = error.notice;
-            res.status(error.status)
-                .json(ans);
+            if (err.notice) {
+                error.notice = err.notice;
+            }
+
+            res.status(err.status)
+                .json({
+                    status: 'error',
+                    error: error
+                });
         }
     }
 };
 
 function errorHandler(err) {
-    // Flowi Errors (request validation)
-    if (err.isFlowi) {
-        const msg = (err.isExplicit || err.label)
-            ? err.message
-            : 'Bad Request';
-        return new APIError(msg, {
-            notice: err.note,
-            type: ErrorTypes.RequestValidation,
-            err: err
-        });
-    }
-
-    // Objection Validation Error (database)
-    if (err instanceof ValidationError) {
-        const key = Object.keys(err.data)[0];
-        err = err.data[key][0];
-        // If unique, public
-        if (err.keyword === 'unique') {
-            return new APIError(err.message,
-                { type: ErrorTypes.DatabaseValidation, err: err });
+    try {
+        // APIError
+        if (err instanceof APIError) {
+            return err;
         }
-        // Non Public
-        return new APIError('Unexpected database validation error', {
-            notice: `'${key}' ${err.message}`,
-            type: ErrorTypes.DatabaseValidation,
-            err: err
-        });
-    }
 
-    // Objection NotFound Error (database)
-    if (err instanceof NotFoundError) {
-        return new APIError(`Item not found`, {
-            notice: err.message,
-            type: ErrorTypes.DatabaseNotFound,
-            err: err
-        });
-    }
+        // Flowi Errors (request validation)
+        if (err.isFlowi) {
+            const msg = (err.isExplicit || err.label)
+                ? err.message
+                : 'Bad Request';
+            return new APIError(msg, {
+                notice: err.note,
+                type: ErrorTypes.RequestValidation,
+                err: err
+            });
+        }
 
-    return new APIError(null, { err: err });
+        // Objection Validation Error (database)
+        if (err instanceof ValidationError) {
+            const key = Object.keys(err.data)[0];
+            err = err.data[key][0];
+            // If unique, public
+            if (err.keyword === 'unique') {
+                return new APIError(err.message,
+                    { type: ErrorTypes.DatabaseValidation, err: err });
+            }
+            // Non Public
+            return new APIError('Unexpected database validation error', {
+                notice: `'${key}' ${err.message}`,
+                type: ErrorTypes.DatabaseValidation,
+                err: err
+            });
+        }
+
+        // Objection NotFound Error (database)
+        if (err instanceof NotFoundError) {
+            return new APIError(`Item not found`, {
+                notice: err.message,
+                type: ErrorTypes.DatabaseNotFound,
+                err: err
+            });
+        }
+
+        return new APIError(null, { err: err });
+
+    // Catch if error
+    } catch (e) {
+        return new APIError(null, { err: e });
+    }
 }
 
 function handler(appOrRouter, scheme) {
@@ -86,19 +101,13 @@ function handler(appOrRouter, scheme) {
                     type: ErrorTypes.NotFound
                 }));
             },
-            (err, req, res, next) => {
-                // Data delivery and error handler
-                // eslint-disable-next-line
-                if (err instanceof Delivery && err.data != undefined) {
-                    return scheme.data(req, res, err);
+            (data, req, res, next) => {
+                // Data delivery
+                if (!(data instanceof Error) && data !== undefined) {
+                    return scheme.data(req, res, data);
                 }
-                if (!(err instanceof APIError)) {
-                    try {
-                        err = errorHandler(err);
-                    } catch (error) {
-                        err = new APIError(null, { err: error });
-                    }
-                }
+                // Error handler
+                const err = errorHandler(data);
                 if (!config.production && err.trace) console.error(err);
                 scheme.error(req, res, err);
             }

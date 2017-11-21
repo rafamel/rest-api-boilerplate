@@ -1,10 +1,9 @@
 'use strict';
-const Delivery = rootRequire('utils/delivery');
 
 function dispatch(cb) {
     return async (req, res, next) => {
         try {
-            next(new Delivery(await cb(req)));
+            next(await cb(req));
         } catch (err) { next(err); }
     };
 }
