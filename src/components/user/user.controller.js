@@ -13,7 +13,8 @@ module.exports = batchDispatch({
             .findById(req.params.id)
             .notNone()
             .then(m => m.$query()
-                .patchAndFetch(req.body)
+                .patch(req.body)
+                .returning('*')
             );
     },
     async delete(req) {

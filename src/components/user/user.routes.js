@@ -1,6 +1,6 @@
 'use strict';
 const router = require('express').Router();
-const APIError = rootRequire('utils/api-error');
+const { APIError, ErrorTypes } = rootRequire('utils/api-error');
 const { KeyFlow } = require('flowi');
 const fwr = rootRequire('middlewares/flowi-request');
 const { authorize } = rootRequire('middlewares/auth');
@@ -9,7 +9,8 @@ const reqSchema = require('../user/user.model').reqSchema;
 
 const verifyUser = (req, res, next) => {
     if (req.user.id !== Number(req.params.id)) {
-        return next(new APIError(`You don't have access to this resource`, { status: 401 }));
+        return next(new APIError(`You don't have access to this resource`,
+            { type: ErrorTypes.Unauthorized }));
     }
     next();
 };

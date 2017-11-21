@@ -29,7 +29,7 @@ module.exports = batchDispatch({
             .notNone()
             .then(m => m
                 .assertOwner(req.user)
-                .$query().updateAndFetch(req.body)
+                .$query().update(req.body).returning('*')
             );
     },
     async patch(req) {
@@ -38,7 +38,7 @@ module.exports = batchDispatch({
             .notNone()
             .then(m => m
                 .assertOwner(req.user)
-                .$query().patchAndFetch(req.body)
+                .$query().patch(req.body).returning('*')
             );
     },
     async delete(req) {

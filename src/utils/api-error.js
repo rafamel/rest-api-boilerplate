@@ -1,25 +1,49 @@
 'use strict';
 
-class APIError extends Error {
-    constructor(announce, options = {}) {
-        let { status, err, type } = options;
-        const wasError = (err instanceof Error);
-        const wasAPIError = (err instanceof APIError);
-
-        if (wasAPIError) {
-            // Inherit first `Thrower` announce and status (override following)
-            announce = err.announce;
-            status = err.status;
-            type = err.type;
-        }
-
-        super((wasError) ? err.message : announce); // Inherit first `Error` message
-        this.announce = announce || 'An error has occurred';
-        this.status = (Number.isInteger(status)) ? status : 500;
-        this.trace = null;
-        this.type = type || 'Unknown';
-        if (wasError) this.trace = (wasAPIError) ? err.trace : err;
+class ErrorType {
+    constructor(name, status) {
+        this.name = name;
+        this.status = status;
     }
 }
 
-module.exports = APIError;
+class APIError extends Error {
+    constructor(message, { notice, status, type, err } = {}) {
+        let trace, typeName;
+        if (err instanceof APIError) {
+            // Inherit first `APIError` properties (override following)
+            message = err.message;
+            notice = err.notice;
+            status = err.status;
+            typeName = err.type;
+            trace = err.trace;
+        } else {
+            if (err instanceof Error) trace = err;
+            if (type instanceof ErrorType) {
+                if (!status || !Number.isInteger(status)) {
+                    status = type.status;
+                }
+                typeName = type.name;
+            }
+        }
+
+        if (!message) message = 'An error has occurred';
+        super(message);
+        this.notice = notice;
+        this.status = (Number.isInteger(status)) ? status : 500;
+        this.type = typeName || 'Error';
+        this.trace = trace; // Might be undefined
+    }
+}
+
+module.exports = {
+    APIError,
+    ErrorTypes: {
+        NotFound: new ErrorType('NotFoundError', 404),
+        Unauthorized: new ErrorType('UnauthorizedError', 401),
+        RequestValidation: new ErrorType('RequestValidationError', 400),
+        Database: new ErrorType('DatabaseError', 500),
+        DatabaseValidation: new ErrorType('DatabaseValidationError', 500),
+        DatabaseNotFound: new ErrorType('DatabaseNotFoundError', 400)
+    }
+};

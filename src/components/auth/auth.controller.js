@@ -1,5 +1,5 @@
 'use strict';
-const APIError = rootRequire('utils/api-error');
+const { APIError, ErrorTypes } = rootRequire('utils/api-error');
 const { batchDispatch } = rootRequire('middlewares/dispatch');
 const Auth = require('./auth.model');
 const User = require('../user/user.model');
@@ -8,11 +8,15 @@ const User = require('../user/user.model');
 
 module.exports = batchDispatch({
     async login(req) {
-        const user = await User.query().first().where('username', req.body.username);
-        if (!user
-            || !(await user.isPassword(req.body.password))) {
-            throw new APIError('Invalid username or password.', { status: 401 });
+        const user = await User.query()
+            .first()
+            .where('username', req.body.username);
+
+        if (!user || !(await user.isPassword(req.body.password))) {
+            throw new APIError('Invalid username or password.',
+                { type: ErrorTypes.Unauthorized });
         }
+
         const refreshToken = await Auth.method.create(user);
         return {
             user: user,
@@ -21,7 +25,9 @@ module.exports = batchDispatch({
     },
 
     async register(req) {
-        const user = await User.query().insertAndFetch(req.body);
+        const user = await User.query()
+            .insert(req.body)
+            .returning('*');
         const refreshToken = await Auth.method.create(user);
         return {
             user: user,
@@ -30,7 +36,9 @@ module.exports = batchDispatch({
     },
 
     async refresh(req) {
-        const user = await User.query().findById(req.body.userId).notNone();
+        const user = await User.query()
+            .findById(req.body.userId)
+            .notNone();
         const refreshToken = await Auth.method.get(req.body.refreshToken);
         return refreshToken.newAccessToken(user);
     }

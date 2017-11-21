@@ -1,5 +1,5 @@
 'use strict';
-const APIError = require('./utils/api-error');
+const { APIError, ErrorTypes } = require('./utils/api-error');
 const Delivery = require('./utils/delivery');
 const { ValidationError, NotFoundError } = require('objection').Model;
 const config = require('./config');
@@ -11,7 +11,7 @@ const schemes = {
         },
         error(req, res, error) {
             res.status(error.status)
-                .send(error.announce);
+                .send(error.message);
         }
     },
     api: {
@@ -22,14 +22,59 @@ const schemes = {
             });
         },
         error(req, res, error) {
+            const ans = {
+                status: 'error',
+                message: error.message,
+                type: error.type
+            };
+            if (error.notice) ans.notice = error.notice;
             res.status(error.status)
-                .json({
-                    status: 'error',
-                    message: error.announce
-                });
+                .json(ans);
         }
     }
 };
+
+function errorHandler(err) {
+    // Flowi Errors (request validation)
+    if (err.isFlowi) {
+        const msg = (err.isExplicit || err.label)
+            ? err.message
+            : 'Bad Request';
+        return new APIError(msg, {
+            notice: err.note,
+            type: ErrorTypes.RequestValidation,
+            err: err
+        });
+    }
+
+    // Objection Validation Error (database)
+    if (err instanceof ValidationError) {
+        const key = Object.keys(err.data)[0];
+        err = err.data[key][0];
+        // If unique, public
+        if (err.keyword === 'unique') {
+            return new APIError(err.message,
+                { type: ErrorTypes.DatabaseValidation, err: err });
+        }
+        // Non Public
+        return new APIError('Unexpected database validation error', {
+            notice: `'${key}' ${err.message}`,
+            type: ErrorTypes.DatabaseValidation,
+            err: err
+        });
+    }
+
+    // Objection NotFound Error (database)
+    if (err instanceof NotFoundError) {
+        return new APIError(`Item not found`, {
+            notice: err.message,
+            type: ErrorTypes.DatabaseNotFound,
+            err: err
+        });
+    }
+
+    return new APIError(null, { err: err });
+}
 
 function handler(appOrRouter, scheme) {
     return (...args) => {
@@ -37,7 +82,9 @@ function handler(appOrRouter, scheme) {
             ...args,
             (req, res, next) => {
                 // 404 Error
-                next(new APIError('Not Found', { status: 404 }));
+                next(new APIError('Not Found', {
+                    type: ErrorTypes.NotFound
+                }));
             },
             (err, req, res, next) => {
                 // Data delivery and error handler
@@ -46,33 +93,13 @@ function handler(appOrRouter, scheme) {
                     return scheme.data(req, res, err);
                 }
                 if (!(err instanceof APIError)) {
-                    if (err.isFlowi) {
-                        if (err.isExplicit || err.label) {
-                            err = new APIError(err.message, { status: 400 });
-                        } else {
-                            if (!config.production) console.error(err);
-                            err = new APIError('Bad Request', { status: 400 });
-                        }
-                    } else if (err instanceof ValidationError) {
-                        const key = Object.keys(err.data)[0];
-                        err = err.data[key][0];
-                        if (err.keyword === 'unique') {
-                            // Public
-                            err = new APIError(err.message, { status: 400 });
-                        } else {
-                            // Non Public
-                            err = new APIError(err.message, { status: 500 });
-                        }
-                    } else if (err instanceof NotFoundError) {
-                        err = new APIError(`Item not found`, {
-                            status: 400,
-                            err: err
-                        });
-                    } else {
-                        err = new APIError(null, { err: err });
+                    try {
+                        err = errorHandler(err);
+                    } catch (error) {
+                        err = new APIError(null, { err: error });
                     }
                 }
-                if (err.trace) console.error(err);
+                if (!config.production && err.trace) console.error(err);
                 scheme.error(req, res, err);
             }
         );

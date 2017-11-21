@@ -45,7 +45,7 @@ module.exports = class User extends beforeUnique({
                 username: { type: 'string', minLength: 1, maxLength: 255 },
                 email: { type: 'string', minLength: 1, maxLength: 255 },
                 role: { type: 'number', default: 0, minLength: 1, maxLength: 255 },
-                // `password` will go into `hash`
+                // `password` will go into 'hash'
                 password: { type: 'string', minLength: 1, maxLength: 255 }
             }
         };

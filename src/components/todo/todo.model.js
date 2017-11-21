@@ -4,7 +4,7 @@ const { Joi, Flow, KeyFlow } = require('flowi');
 const { Model, ParentModel } = rootRequire('db/ParentModel');
 const beforeUnique = require('objection-before-and-unique');
 
-const APIError = rootRequire('utils/api-error');
+const { APIError, ErrorTypes } = rootRequire('utils/api-error');
 
 module.exports = class Todo extends beforeUnique({
     unique: [
@@ -60,7 +60,8 @@ module.exports = class Todo extends beforeUnique({
     // Instance Methods
     assertOwner(user) {
         if (this.user_id !== user.id) {
-            throw new APIError(`You don't have access to this resource.`, { status: 401 });
+            throw new APIError(`You don't have access to this resource.`,
+                { type: ErrorTypes.Unauthorized });
         }
         return this;
     }

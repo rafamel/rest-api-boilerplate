@@ -1,5 +1,5 @@
 'use strict';
-const APIError = rootRequire('utils/api-error');
+const { APIError, ErrorTypes } = rootRequire('utils/api-error');
 const passport = require('passport');
 const User = rootRequire('components/user/user.model');
 
@@ -17,16 +17,23 @@ module.exports = {
                         new APIError('Error retrieving user data.', { err: err })
                     );
                 }
-                const noAccess = new APIError(
-                    'You don\'t have access to this resource.', { status: 401, err: info });
+                const noAccess = () => new APIError(
+                    'You don\'t have access to this resource.',
+                    { type: ErrorTypes.Unauthorized, err: info }
+                );
                 if (!user) {
                     return (info && info.name === 'TokenExpiredError')
-                        ? next(new APIError('Access Token has expired.', { status: 401, err: info }))
-                        : next(noAccess);
+                        ? next(new APIError(
+                            'Access Token has expired.',
+                            { type: ErrorTypes.Unauthorized, err: info }
+                        ))
+                        : next(noAccess());
                 }
-                if (role > 0
-                    && (await User.query().findById(user.id)).role !== role) {
-                    return next(noAccess);
+                if (
+                    role > 0
+                    && (await User.query().findById(user.id)).role !== role
+                ) {
+                    return next(noAccess());
                 }
 
                 req.user = user;

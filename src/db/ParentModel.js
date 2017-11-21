@@ -1,12 +1,14 @@
 'use strict';
 const Model = require('objection').Model;
-const APIError = rootRequire('utils/api-error');
+const { APIError, ErrorTypes } = rootRequire('utils/api-error');
 
 class ParentQueryBuilder extends Model.QueryBuilder {
     notNone(label = 'Item') {
         return this.runAfter((res, builder) => {
             const thrower = () => {
-                throw new APIError(`${label} not found.`, { status: 400 });
+                throw new APIError(`${label} not found.`, {
+                    type: ErrorTypes.DatabaseNotFound
+                });
             };
             if (Array.isArray(res)) {
                 if (res.length === 0) return thrower();
