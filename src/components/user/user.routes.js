@@ -1,11 +1,9 @@
 'use strict';
 const router = require('express').Router();
 const { APIError, ErrorTypes } = rootRequire('utils/api-error');
-const { KeyFlow } = require('flowi');
-const fwr = rootRequire('middlewares/flowi-request');
 const { authorize } = rootRequire('middlewares/auth');
+const validate = require('./user.validation');
 const controller = require('./user.controller');
-const reqSchema = require('../user/user.model').reqSchema;
 
 const verifyUser = (req, res, next) => {
     if (req.user.id !== Number(req.params.id)) {
@@ -15,15 +13,9 @@ const verifyUser = (req, res, next) => {
     next();
 };
 
-const validate = {
-    patch: {
-        body: KeyFlow(reqSchema).require(true, 1)
-    }
-};
-
 // User - /user
 router.get('/:id', authorize(), verifyUser, controller.show);
-router.patch('/:id', fwr(validate.patch), authorize(), verifyUser, controller.patch);
+router.patch('/:id', validate.patch, authorize(), verifyUser, controller.patch);
 router.delete('/:id', authorize(), verifyUser, controller.delete);
 
 module.exports = router;

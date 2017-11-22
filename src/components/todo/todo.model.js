@@ -1,6 +1,5 @@
 'use strict';
 const path = require('path');
-const { Joi, Flow, KeyFlow } = require('flowi');
 const { Model, ParentModel } = rootRequire('db/ParentModel');
 const beforeUnique = require('objection-before-and-unique');
 
@@ -26,14 +25,6 @@ module.exports = class Todo extends beforeUnique({
                 user_id: { type: 'integer' }
             }
         };
-    }
-
-    // Request validation schema
-    static get reqSchema() {
-        return KeyFlow({
-            name: Joi.string().min(1).max(255),
-            done: Flow(Joi.boolean()).convert()
-        }).labels({ name: 'Todo name' });
     }
 
     // Associations

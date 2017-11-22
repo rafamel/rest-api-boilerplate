@@ -1,6 +1,5 @@
 'use strict';
 const path = require('path');
-const { Joi, Flow, KeyFlow } = require('flowi');
 const { Model, ParentModel } = rootRequire('db/ParentModel');
 
 const { APIError, ErrorTypes } = rootRequire('utils/api-error');
@@ -22,18 +21,10 @@ module.exports = class RefreshToken extends ParentModel {
             properties: {
                 id: { type: 'integer' },
                 token: { type: 'string', minLength: 1, maxLength: 255 },
-                expires: { type: 'date-time' },
+                expires: { type: 'string' },
                 user_id: { type: 'integer' }
             }
         };
-    }
-
-    // Request validation schema
-    static get reqSchema() {
-        return KeyFlow({
-            userId: Flow(Joi.number().integer().positive()).convert(),
-            refreshToken: Joi.string()
-        });
     }
 
     // Associations

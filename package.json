@@ -11,7 +11,6 @@
     "lint:md": "markdownlint *.md --config markdown.json",
     "test": "npm run lint:test && jest ./test/.*.test.js --runInBand --verbose",
     "checks": "run-s lint lint:* && jest ./test/.*.test.js && npm outdated",
-    "build:db": "node src/database/db_build.js",
     "build:docs": "echo \"Error: no command specified\" && exit 1",
     "update:packages": "rm -rf node_modules && rm package-lock.json && npm update --save/save-dev && npm install && npm outdated"
   },

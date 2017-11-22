@@ -19,4 +19,24 @@ function flowiRequest(toValidate = {}) {
     };
 };
 
-module.exports = flowiRequest;
+class RequestValidation {
+    constructor(obj) {
+        if (!obj.schema || !obj.schema.isFlowi) {
+            throw Error(`RequestValidation requires a Flowi object as key 'schema'`);
+        }
+        this.schema = obj.schema;
+
+        if (obj.routes) {
+            const routes = obj.routes(obj.schema);
+            if (routes.hasOwnProperty('schema')) {
+                throw Error(`RequestValidation cannot receive a key 'schema' as a route`);
+            }
+
+            Object.keys(routes).forEach(key => {
+                this[key] = flowiRequest(routes[key]);
+            });
+        }
+    }
+}
+
+module.exports = RequestValidation;

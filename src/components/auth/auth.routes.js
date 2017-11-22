@@ -1,27 +1,12 @@
 'use strict';
 const router = require('express').Router();
-const { KeyFlow } = require('flowi');
-const fwr = rootRequire('middlewares/flowi-request');
+const validate = require('./auth.validation');
 const controller = require('./auth.controller');
-const authReqSchema = require('./auth.model').reqSchema;
-const userReqSchema = require('../user/user.model').reqSchema;
-
-const validate = {
-    register: {
-        body: KeyFlow(userReqSchema).require()
-    },
-    login: {
-        body: KeyFlow(userReqSchema).use(['username', 'password']).require()
-    },
-    refresh: {
-        body: KeyFlow(authReqSchema).require()
-    }
-};
 
 // Auth - /auth
-router.post('/register', fwr(validate.register), controller.register);
-router.post('/login', fwr(validate.login), controller.login);
-router.post('/refresh', fwr(validate.refresh), controller.refresh);
+router.post('/register', validate.register, controller.register);
+router.post('/login', validate.login, controller.login);
+router.post('/refresh', validate.refresh, controller.refresh);
 
 module.exports = router;
 
