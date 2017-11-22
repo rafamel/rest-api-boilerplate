@@ -1,21 +1,21 @@
 'use strict';
-const path = require('path');
+const { env, onEnv } = require('./utils/config-utils');
 const randtoken = require('rand-token');
-const Joi = require('joi');
 
-const config = () => ({
+module.exports = {
     production: env === 'production',
-    port: process.env.PORT || forEnv({
+    port: process.env.PORT || onEnv({
         default: 3000,
         production: 80
     }),
-    logs: forEnv({
+    logs: onEnv({
         default: 'dev',
         production: 'combined'
     }),
+    parse: { json: false, urlencoded: true },
     db: {
         client: 'pg',
-        connection: forEnv({
+        connection: onEnv({
             default: process.env.DB_URL,
             test: process.env.DB_TEST_URL
         }),
@@ -23,54 +23,19 @@ const config = () => ({
     },
     auth: {
         jwtSecret: process.env.JWT_SECRET || randtoken.generate(40),
-        jwtSaltWorkFactor: process.env.JWT_SALT_WORK_FACTOR || forEnv({
+        jwtSaltWorkFactor: process.env.JWT_SALT_WORK_FACTOR || onEnv({
             default: 12,
             development: 1
         }),
         jwtAlgorithm: process.env.JWT_ALGORITHM || 'HS256',
-        jwtAuthExpiry: forEnv({
+        jwtAuthExpiry: onEnv({
             default: '15m',
             development: '15d',
             test: '5s'
         }),
-        refreshToken: forEnv({
+        refreshToken: onEnv({
             default: { expiry: '45d', renewRemaining: '15d' },
             test: { expity: '10s', renewRemaining: '5s' }
         })
     }
-});
-
-// Load environment variables from file
-require('dotenv-safe').load({
-    path: path.join(__dirname, '../config.env'),
-    sample: path.join(__dirname, '../config.env.example')
-});
-
-// Validating NODE_ENV as one of
-// 'production', 'development', 'test'
-const env = Joi.attempt(
-    process.env.NODE_ENV,
-    Joi.string()
-        .default('development')
-        .valid(['production', 'development', 'test'])
-        .label('NODE_ENV')
-);
-
-// Helper - Get the right config value for current env
-function forEnv(obj) {
-    // Validate input as object with required 'default'
-    // key and optional 'production', 'development', and 'test' keys
-    Joi.assert(
-        obj,
-        Joi.object().keys({
-            default: Joi.any(),
-            production: Joi.any(),
-            development: Joi.any(),
-            test: Joi.any()
-        }).requiredKeys(['default'])
-    );
-    // Get and return config value
-    return obj.hasOwnProperty(env) ? obj[env] : obj.default;
-}
-
-module.exports = config();
+};

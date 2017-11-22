@@ -1,5 +1,5 @@
 'use strict';
-const Model = require('objection').Model;
+const { Model, AjvValidator } = require('objection');
 const { APIError, ErrorTypes } = rootRequire('utils/api-error');
 
 class ParentQueryBuilder extends Model.QueryBuilder {
@@ -23,6 +23,20 @@ class ParentQueryBuilder extends Model.QueryBuilder {
 class ParentModel extends Model {
     static get QueryBuilder() {
         return ParentQueryBuilder;
+    }
+
+    static createValidator() {
+        return new AjvValidator({
+            onCreateAjv: ajv => {
+                /* Do Nothing by default */
+            },
+            options: {
+                allErrors: false,
+                validateSchema: true,
+                ownProperties: true,
+                v5: true
+            }
+        });
     }
 
     $beforeInsert(...args) {

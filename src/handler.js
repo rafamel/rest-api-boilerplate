@@ -68,7 +68,7 @@ function errorHandler(err) {
             }
             // Non Public
             return new APIError('Unexpected database validation error', {
-                notice: `'${key}' ${err.message}`,
+                notice: `['${key}'] ${err.message}`,
                 type: ErrorTypes.DatabaseValidation,
                 err: err
             });

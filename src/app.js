@@ -10,11 +10,10 @@ const cors = require('cors');
 // const methodOverride = require('method-override');
 // const RateLimit = require('express-rate-limit');
 
-// TODO: passport with OAuth2, sequelize, user
-// component / remove / update user, refresh token to id+refresh
+// TODO: passport with OAuth2
 
 // rootRequire, config
-require('./utils/rootRequire')(__dirname);
+require('./utils/root-require')(__dirname);
 const config = require('./config');
 
 // Initialize Express
@@ -24,8 +23,14 @@ require('./db/connect');
 
 // Middleware
 app.use(morgan(config.logs)); // Logger
-app.use(bodyParser.json()); // JSON parser
-app.use(bodyParser.urlencoded({ extended: false })); // Form-urlencoded parser
+if (config.parse.json) {
+    // JSON parser
+    app.use(bodyParser.json());
+}
+if (config.parse.urlencoded) {
+    // Form-urlencoded parser
+    app.use(bodyParser.urlencoded({ extended: false }));
+}
 app.use(compress()); // Gzip compression
 app.use(helmet()); // Secure headers
 require('./passport')(app); // Passport
