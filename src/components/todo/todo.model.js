@@ -2,8 +2,7 @@
 const path = require('path');
 const { Model, ParentModel } = rootRequire('db/ParentModel');
 const beforeUnique = require('objection-before-and-unique');
-
-const { APIError, ErrorTypes } = rootRequire('utils/api-error');
+const { PublicError, ErrorTypes } = rootRequire('utils/public-error');
 
 module.exports = class Todo extends beforeUnique({
     unique: [
@@ -51,7 +50,7 @@ module.exports = class Todo extends beforeUnique({
     // Instance Methods
     assertOwner(user) {
         if (this.user_id !== user.id) {
-            throw new APIError(`You don't have access to this resource.`,
+            throw new PublicError(`You don't have access to this resource.`,
                 { type: ErrorTypes.Unauthorized });
         }
         return this;

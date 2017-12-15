@@ -1,5 +1,5 @@
 'use strict';
-const { APIError, ErrorTypes } = require('./utils/api-error');
+const { PublicError, ErrorTypes } = require('./utils/public-error');
 const { ValidationError, NotFoundError } = require('objection').Model;
 const config = require('./config');
 
@@ -37,8 +37,8 @@ const schemes = {
 
 function errorHandler(err) {
     try {
-        // APIError
-        if (err instanceof APIError) {
+        // PublicError
+        if (err instanceof PublicError) {
             return err;
         }
 
@@ -48,7 +48,7 @@ function errorHandler(err) {
             const msg = (details.context.isExplicit || details.context.addLabel)
                 ? details.message
                 : 'Bad Request';
-            return new APIError(msg, {
+            return new PublicError(msg, {
                 notice: err.message,
                 type: ErrorTypes.RequestValidation,
                 err: err
@@ -61,11 +61,11 @@ function errorHandler(err) {
             err = err.data[key][0];
             // If unique, public & RequestValidation
             if (err.keyword === 'unique') {
-                return new APIError(err.message,
+                return new PublicError(err.message,
                     { type: ErrorTypes.RequestValidation, err: err });
             }
             // Non Public
-            return new APIError('Unexpected database validation error', {
+            return new PublicError('Unexpected database validation error', {
                 notice: `['${key}'] ${err.message}`,
                 type: ErrorTypes.DatabaseValidation,
                 err: err
@@ -74,18 +74,18 @@ function errorHandler(err) {
 
         // Objection NotFound Error (database)
         if (err instanceof NotFoundError) {
-            return new APIError(`Item not found`, {
+            return new PublicError(`Item not found`, {
                 notice: err.message,
                 type: ErrorTypes.DatabaseNotFound,
                 err: err
             });
         }
 
-        return new APIError(null, { err: err });
+        return new PublicError(null, { err: err });
 
     // Catch if error
     } catch (e) {
-        return new APIError(null, { err: e });
+        return new PublicError(null, { err: e });
     }
 }
 
@@ -95,7 +95,7 @@ function handler(appOrRouter, scheme) {
             ...args,
             (req, res, next) => {
                 // 404 Error
-                next(new APIError('Not Found', {
+                next(new PublicError('Not Found', {
                     type: ErrorTypes.NotFound
                 }));
             },

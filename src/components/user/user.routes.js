@@ -1,13 +1,13 @@
 'use strict';
 const router = require('express').Router();
-const { APIError, ErrorTypes } = rootRequire('utils/api-error');
+const { PublicError, ErrorTypes } = rootRequire('utils/public-error');
 const { authorize } = rootRequire('middlewares/auth');
 const validate = require('./user.validation');
 const controller = require('./user.controller');
 
 const verifyUser = (req, res, next) => {
     if (req.user.id !== Number(req.params.id)) {
-        return next(new APIError(`You don't have access to this resource`,
+        return next(new PublicError(`You don't have access to this resource`,
             { type: ErrorTypes.Unauthorized }));
     }
     next();

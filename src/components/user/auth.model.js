@@ -2,7 +2,7 @@
 const path = require('path');
 const { Model, ParentModel } = rootRequire('db/ParentModel');
 
-const { APIError, ErrorTypes } = rootRequire('utils/api-error');
+const { PublicError, ErrorTypes } = rootRequire('utils/public-error');
 const config = rootRequire('config');
 const ms = require('ms');
 const moment = require('moment');
@@ -63,7 +63,7 @@ module.exports = class RefreshToken extends ParentModel {
                 const [id, token] = fullToken.split('.');
                 const dbToken = await this.query().findById(id);
                 if (!dbToken || dbToken.token !== token) {
-                    throw new APIError('Invalid token',
+                    throw new PublicError('Invalid token',
                         { type: ErrorTypes.Unauthorized });
                 }
                 return dbToken;
@@ -79,7 +79,7 @@ module.exports = class RefreshToken extends ParentModel {
     async runChecks(user) {
         // Check user id
         if (!user || this.user_id !== user.id) {
-            throw new APIError('Invalid token',
+            throw new PublicError('Invalid token',
                 { type: ErrorTypes.Unauthorized });
         }
 
@@ -87,7 +87,7 @@ module.exports = class RefreshToken extends ParentModel {
         const expiry = moment(this.expires);
         const currentUnix = moment().unix();
         if (currentUnix > expiry.unix()) {
-            throw new APIError('Invalid token',
+            throw new PublicError('Invalid token',
                 { type: ErrorTypes.Unauthorized });
         }
 

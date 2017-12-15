@@ -24,11 +24,11 @@ const ErrorTypes = {
     DatabaseNotFound: new ErrorType('DatabaseNotFoundError', 400)
 };
 
-class APIError extends Error {
+class PublicError extends Error {
     constructor(message, { notice, status, type, err } = {}) {
         let trace, typeName;
-        if (err instanceof APIError) {
-            // Inherit first `APIError` properties (override following)
+        if (err instanceof PublicError) {
+            // Inherit first `PublicError` properties (override following)
             message = err.message;
             notice = err.notice;
             status = err.status;
@@ -55,6 +55,6 @@ class APIError extends Error {
 }
 
 module.exports = {
-    APIError,
+    PublicError,
     ErrorTypes
 };

@@ -1,5 +1,5 @@
 'use strict';
-const { APIError, ErrorTypes } = rootRequire('utils/api-error');
+const { PublicError, ErrorTypes } = rootRequire('utils/public-error');
 const passport = require('passport');
 const User = rootRequire('components/user/user.model');
 
@@ -14,16 +14,16 @@ module.exports = {
             passport.authenticate('jwt', { session: false }, async (err, user, info) => {
                 if (err) {
                     return next(
-                        new APIError('Error retrieving user data.', { err: err })
+                        new PublicError('Error retrieving user data.', { err: err })
                     );
                 }
-                const noAccess = () => new APIError(
+                const noAccess = () => new PublicError(
                     'You don\'t have access to this resource.',
                     { type: ErrorTypes.Unauthorized, err: info }
                 );
                 if (!user) {
                     return (info && info.name === 'TokenExpiredError')
-                        ? next(new APIError(
+                        ? next(new PublicError(
                             'Access Token has expired.',
                             { type: ErrorTypes.Unauthorized, err: info }
                         ))

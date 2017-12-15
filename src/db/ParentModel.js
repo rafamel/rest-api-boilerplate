@@ -1,13 +1,13 @@
 'use strict';
 const { Model, AjvValidator } = require('objection');
-const { APIError, ErrorTypes } = rootRequire('utils/api-error');
+const { PublicError, ErrorTypes } = rootRequire('utils/public-error');
 const config = rootRequire('./config');
 
 class ParentQueryBuilder extends Model.QueryBuilder {
     notNone(label = 'Item') {
         return this.runAfter((res, builder) => {
             const thrower = () => {
-                throw new APIError(`${label} not found.`, {
+                throw new PublicError(`${label} not found.`, {
                     type: ErrorTypes.DatabaseNotFound
                 });
             };

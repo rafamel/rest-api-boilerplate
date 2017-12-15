@@ -1,5 +1,5 @@
 'use strict';
-const { APIError, ErrorTypes } = rootRequire('utils/api-error');
+const { PublicError, ErrorTypes } = rootRequire('utils/public-error');
 const { batchDispatch } = rootRequire('middlewares/dispatch');
 const Auth = require('./auth.model');
 const User = require('./user.model');
@@ -12,7 +12,7 @@ module.exports = batchDispatch({
             .where('username', req.body.username);
 
         if (!user || !(await user.isPassword(req.body.password))) {
-            throw new APIError('Invalid username or password.',
+            throw new PublicError('Invalid username or password.',
                 { type: ErrorTypes.Unauthorized });
         }
 

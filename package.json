@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon ./node_modules/.bin/run-s lint start",
+    "dev": "nodemon --watch src --exec \"clear && run-s lint start\"",
     "lint": "eslint ./src --ext .js",
     "lint:test": "eslint ./test --ext .js",
     "lint:md": "markdownlint *.md --config markdown.json",
-    "test": "npm run lint:test && jest ./test/.*.test.js --runInBand --verbose",
+    "test": "npm run lint:test && jest ./test/.*.test.js --runInBand",
+    "test:watch": "nodemon --watch test --exec \"clear && npm t\"",
     "checks": "run-s lint lint:* && jest ./test/.*.test.js && npm outdated",
     "build:docs": "echo \"Error: no command specified\" && exit 1",
     "update:packages": "rm -rf node_modules && rm package-lock.json && npm update --save/save-dev && npm install && npm outdated"
