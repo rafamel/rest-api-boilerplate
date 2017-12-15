@@ -1,6 +1,7 @@
 'use strict';
 const { Model, AjvValidator } = require('objection');
 const { APIError, ErrorTypes } = rootRequire('utils/api-error');
+const config = rootRequire('./config');
 
 class ParentQueryBuilder extends Model.QueryBuilder {
     notNone(label = 'Item') {
@@ -27,12 +28,10 @@ class ParentModel extends Model {
 
     static createValidator() {
         return new AjvValidator({
-            onCreateAjv: ajv => {
-                /* Do Nothing by default */
-            },
+            onCreateAjv: ajv => {},
             options: {
                 allErrors: false,
-                validateSchema: true,
+                validateSchema: !config.production,
                 ownProperties: true,
                 v5: true
             }

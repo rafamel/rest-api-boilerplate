@@ -25,10 +25,7 @@ const schemes = {
                 message: err.message,
                 type: err.type
             };
-            if (err.notice) {
-                error.notice = err.notice;
-            }
-
+            if (err.notice) error.notice = err.notice;
             res.status(err.status)
                 .json({
                     status: 'error',
@@ -45,13 +42,14 @@ function errorHandler(err) {
             return err;
         }
 
-        // Flowi Errors (request validation)
-        if (err.isFlowi) {
-            const msg = (err.isExplicit || err.label)
-                ? err.message
+        // Joi
+        if (err.isRequestValidation && err.isJoi) {
+            const details = err.details[0];
+            const msg = (details.context.isExplicit || details.context.addLabel)
+                ? details.message
                 : 'Bad Request';
             return new APIError(msg, {
-                notice: err.note,
+                notice: err.message,
                 type: ErrorTypes.RequestValidation,
                 err: err
             });
@@ -61,10 +59,10 @@ function errorHandler(err) {
         if (err instanceof ValidationError) {
             const key = Object.keys(err.data)[0];
             err = err.data[key][0];
-            // If unique, public
+            // If unique, public & RequestValidation
             if (err.keyword === 'unique') {
                 return new APIError(err.message,
-                    { type: ErrorTypes.DatabaseValidation, err: err });
+                    { type: ErrorTypes.RequestValidation, err: err });
             }
             // Non Public
             return new APIError('Unexpected database validation error', {

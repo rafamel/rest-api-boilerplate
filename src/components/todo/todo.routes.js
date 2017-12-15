@@ -7,8 +7,8 @@ const controller = require('./todo.controller');
 // Auth - /auth
 router.get('/', authorize(), controller.index);
 router.get('/:id', authorize(), controller.show);
-router.post('/', validate.createUpdate, authorize(), controller.create);
-router.put('/:id', validate.createUpdate, authorize(), controller.update);
+router.post('/', validate.create, authorize(), controller.create);
+router.put('/:id', validate.update, authorize(), controller.update);
 router.patch('/:id', validate.patch, authorize(), controller.patch);
 router.delete('/:id', authorize(), controller.delete);
 

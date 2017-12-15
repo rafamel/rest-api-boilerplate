@@ -1,11 +1,28 @@
 'use strict';
+const Joi = require('joi');
+const config = rootRequire('config');
 
 class ErrorType {
     constructor(name, status) {
+        // Validate input
+        Joi.assert(name, Joi.string().label('name'), config.joi);
+        Joi.assert(status,
+            Joi.number().integer().min(100).max(599).label('status'), config.joi);
+
         this.name = name;
         this.status = status;
     }
 }
+
+const ErrorTypes = {
+    Server: new ErrorType('ServerError', 500), // Default
+    NotFound: new ErrorType('NotFoundError', 404),
+    Unauthorized: new ErrorType('UnauthorizedError', 401),
+    RequestValidation: new ErrorType('RequestValidationError', 400),
+    Database: new ErrorType('DatabaseError', 500),
+    DatabaseValidation: new ErrorType('DatabaseValidationError', 500),
+    DatabaseNotFound: new ErrorType('DatabaseNotFoundError', 400)
+};
 
 class APIError extends Error {
     constructor(message, { notice, status, type, err } = {}) {
@@ -19,31 +36,25 @@ class APIError extends Error {
             trace = err.trace;
         } else {
             if (err instanceof Error) trace = err;
-            if (type instanceof ErrorType) {
-                if (!status || !Number.isInteger(status)) {
-                    status = type.status;
-                }
-                typeName = type.name;
+            if (!(type instanceof ErrorType)) {
+                type = ErrorTypes.Server;
             }
+            if (!status || !Number.isInteger(status)) {
+                status = type.status;
+            }
+            typeName = type.name;
         }
 
         if (!message) message = 'An error has occurred';
         super(message);
         this.notice = notice;
-        this.status = (Number.isInteger(status)) ? status : 500;
-        this.type = typeName || 'Error';
+        this.status = status;
+        this.type = typeName;
         this.trace = trace; // Might be undefined
     }
 }
 
 module.exports = {
     APIError,
-    ErrorTypes: {
-        NotFound: new ErrorType('NotFoundError', 404),
-        Unauthorized: new ErrorType('UnauthorizedError', 401),
-        RequestValidation: new ErrorType('RequestValidationError', 400),
-        Database: new ErrorType('DatabaseError', 500),
-        DatabaseValidation: new ErrorType('DatabaseValidationError', 500),
-        DatabaseNotFound: new ErrorType('DatabaseNotFoundError', 400)
-    }
+    ErrorTypes
 };

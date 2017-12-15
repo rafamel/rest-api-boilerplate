@@ -32,7 +32,7 @@ module.exports = class RefreshToken extends ParentModel {
         return {
             user: {
                 relation: Model.BelongsToOneRelation,
-                modelClass: path.join(__dirname, '../user/user.model'),
+                modelClass: path.join(__dirname, 'user.model'),
                 join: {
                     from: 'refresh_token.user_id',
                     to: 'users.id'

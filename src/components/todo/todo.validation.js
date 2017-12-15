@@ -1,20 +1,19 @@
 'use strict';
-const { Joi, Flow, KeyFlow } = require('flowi');
-const RequestValidation = rootRequire('./middlewares/request-validation');
+const Joi = require('joi-add')();
+const { RequestValidation, ValidationSchema } = require('request-validation');
+
+const schema = new ValidationSchema({
+    body: {
+        name: Joi.string()
+            .min(1).max(255)
+            .addLabel('Todo name'),
+        done: Joi.boolean()
+            .options({ convert: true })
+    }
+});
 
 module.exports = new RequestValidation({
-    schema: KeyFlow({
-        name: Joi.string().min(1).max(255),
-        done: Flow(Joi.boolean()).convert()
-    }).labels({ name: 'Todo name' }),
-
-    routes: (schema) => ({
-        createUpdate: {
-            body: KeyFlow(schema).require(['name'])
-        },
-        patch: {
-            body: KeyFlow(schema)
-                .require(true, 1)
-        }
-    })
+    create: schema.presence('required'),
+    update: schema.presence('required'),
+    patch: schema
 });

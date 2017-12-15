@@ -37,5 +37,15 @@ module.exports = {
             default: { expiry: '45d', renewRemaining: '15d' },
             test: { expity: '10s', renewRemaining: '5s' }
         })
+    },
+    joi: {
+        abortEarly: true,
+        convert: false,
+        stripUnknown: true,
+        presence: 'optional',
+        language: {
+            root: 'Value',
+            key: '{{!label}} '
+        }
     }
 };

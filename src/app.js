@@ -15,6 +15,9 @@ const cors = require('cors');
 // rootRequire, config
 require('./utils/root-require')(__dirname);
 const config = require('./config');
+// Setup joi-add
+const baseJoi = require('joi');
+require('joi-add')(baseJoi);
 
 // Initialize Express
 const app = express();

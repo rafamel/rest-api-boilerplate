@@ -14,6 +14,10 @@ const verifyUser = (req, res, next) => {
 };
 
 // User - /user
+router.post('/register', validate.register, controller.register);
+router.post('/login', validate.login, controller.login);
+router.post('/refresh', validate.refresh, controller.refresh);
+
 router.get('/:id', authorize(), verifyUser, controller.show);
 router.patch('/:id', validate.patch, authorize(), verifyUser, controller.patch);
 router.delete('/:id', authorize(), verifyUser, controller.delete);

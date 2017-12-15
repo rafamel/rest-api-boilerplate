@@ -2,8 +2,7 @@
 const { batchDispatch } = rootRequire('middlewares/dispatch');
 const Todo = require('./todo.model');
 
-// Naming: index, show, create, update, destroy
-
+// index, show, create, update, patch, delete
 module.exports = batchDispatch({
     async index(req) {
         return Todo.query()

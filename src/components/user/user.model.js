@@ -56,7 +56,7 @@ module.exports = class User extends beforeUnique({
         return {
             refreshTokens: {
                 relation: Model.HasManyRelation,
-                modelClass: path.join(__dirname, '../auth/auth.model'),
+                modelClass: path.join(__dirname, 'auth.model'),
                 join: {
                     from: 'users.id',
                     to: 'refresh_token.user_id'
