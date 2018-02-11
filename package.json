@@ -4,21 +4,29 @@
   "description": "API Boilerplate",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon --watch src --exec \"clear && run-s lint start\"",
-    "lint": "eslint ./src --ext .js",
-    "lint:test": "eslint ./test --ext .js",
-    "lint:md": "markdownlint *.md --config markdown.json",
+    "precommit": "npm run checks",
+    "start": "node index.js",
+    "dev": "nodemon --watch src --exec \"clear && run-s lint:src start\"",
     "test": "npm run lint:test && jest ./test/.*.test.js --runInBand",
     "test:watch": "nodemon --watch test --exec \"clear && npm t\"",
-    "checks": "run-s lint lint:* && jest ./test/.*.test.js && npm outdated",
-    "build:docs": "echo \"Error: no command specified\" && exit 1",
-    "update:packages": "rm -rf node_modules && rm package-lock.json && npm update --save/save-dev && npm install && npm outdated"
+    "fix":
+      "prettier --ignore-path .gitignore --write \"*/**/*.json\" \"**/*.{js,md}\"",
+    "lint": "eslint \"**/*.js\" --ignore-path .gitignore",
+    "lint:src": "eslint ./src --ext .js --ignore-path .gitignore",
+    "lint:test": "eslint ./test --ext .js --ignore-path .gitignore",
+    "lint:md": "markdownlint *.md --config markdown.json",
+    "checks": "run-s lint lint:md && jest ./test/.*.test.js && npm outdated",
+    "update:packages":
+      "rm -rf node_modules && rm package-lock.json && npm update --save/save-dev && npm install && npm outdated"
   },
   "author": "Rafa Mel",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.17.1",
+    "babel-plugin-root-import": "^5.1.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "compression": "^1.7.1",
@@ -36,26 +44,30 @@
     "objection": "^0.9.2",
     "objection-before-and-unique": "^0.3.3",
     "passport": "^0.4.0",
-    "passport-http-bearer": "^1.0.1",
     "passport-jwt": "^3.0.1",
     "pg": "^7.4.0",
     "rand-token": "^0.4.0",
-    "request-validation": "^0.1.1-0"
+    "request-validation": "^0.1.2-0"
   },
   "devDependencies": {
-    "@types/jest": "^21.1.8",
+    "@types/jest": "^22.1.2",
     "@types/joi": "^13.0.3",
+    "babel-eslint": "^8.2.1",
     "eslint": "^4.11.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jest": "^21.3.2",
-    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "jest-cli": "^21.2.1",
-    "markdownlint-cli": "^0.5.0",
+    "husky": "^0.14.3",
+    "jest-cli": "^22.2.2",
+    "markdownlint-cli": "^0.7.1",
     "nodemon": "^1.12.1",
-    "npm-run-all": "^4.1.1"
+    "npm-run-all": "^4.1.1",
+    "prettier": "1.10.2"
   },
   "engines": {
     "node": ">=8.0.0"

@@ -1,19 +1,22 @@
-'use strict';
-const router = require('express').Router();
-const { PublicError, ErrorTypes } = rootRequire('utils/public-error');
-const { authorize } = rootRequire('middlewares/auth');
-const validate = require('./user.validation');
-const controller = require('./user.controller');
+import { Router } from 'express';
+import PublicError, { ErrorTypes } from '@/utils/public-error';
+import authorize from '@/middlewares/authorize';
+import validate from './user.validation';
+import controller from './user.controller';
 
 const verifyUser = (req, res, next) => {
-    if (req.user.id !== Number(req.params.id)) {
-        return next(new PublicError(`You don't have access to this resource`,
-            { type: ErrorTypes.Unauthorized }));
-    }
-    next();
+  if (req.user.id !== Number(req.params.id)) {
+    return next(
+      new PublicError(`You don't have access to this resource`, {
+        type: ErrorTypes.Unauthorized
+      })
+    );
+  }
+  next();
 };
 
 // User - /user
+const router = Router();
 router.post('/register', validate.register, controller.register);
 router.post('/login', validate.login, controller.login);
 router.post('/refresh', validate.refresh, controller.refresh);

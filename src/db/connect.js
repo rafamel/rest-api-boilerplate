@@ -1,8 +1,9 @@
-'use strict';
+import objection from 'objection';
+import Knex from 'knex';
+import config from '@/config';
 
-const objection = require('objection');
-const Model = objection.Model;
-const Knex = require('knex');
-const knexConfig = require('../../knexfile');
-const knex = Knex(knexConfig);
-Model.knex(knex);
+export default function dbConnect() {
+  const Model = objection.Model;
+  const knex = Knex(config.db);
+  Model.knex(knex);
+}

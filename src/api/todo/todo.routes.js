@@ -1,10 +1,10 @@
-'use strict';
-const router = require('express').Router();
-const { authorize } = rootRequire('middlewares/auth');
-const validate = require('./todo.validation');
-const controller = require('./todo.controller');
+import { Router } from 'express';
+import authorize from '@/middlewares/authorize';
+import validate from './todo.validation';
+import controller from './todo.controller';
 
 // Auth - /auth
+const router = Router();
 router.get('/', authorize(), controller.index);
 router.get('/:id', authorize(), controller.show);
 router.post('/', validate.create, authorize(), controller.create);
