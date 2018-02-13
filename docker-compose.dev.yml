@@ -1,0 +1,18 @@
+version: "3.2"
+services:
+  api:
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DB_PASS: db_dev_pass
+    volumes:
+      - type: bind
+        source: ./
+        target: /usr/src/app
+    command: npx nodemon --watch src --exec "npm run lint:src && node index.js"
+  db:
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_PASSWORD: db_dev_pass

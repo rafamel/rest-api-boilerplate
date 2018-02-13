@@ -11,7 +11,6 @@ import config from '@/config';
 
 // Initialize Express
 const app = express();
-
 // Middleware
 app.use(morgan(config.logs)); // Logger
 app.use(bodyParser.json()); // Parse JSON

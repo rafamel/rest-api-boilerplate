@@ -1,5 +1,6 @@
 import path from 'path';
-import Joi from 'joi';
+import Joi from '@/utils/joi';
+import mergeWith from 'lodash.mergewith';
 import dotEnvSafe from 'dotenv-safe';
 
 // Load environment variables from file
@@ -7,6 +8,12 @@ dotEnvSafe.load({
   path: path.join(__dirname, '../../.env'),
   sample: path.join(__dirname, '../../.env.example')
 });
+
+function dbUrlPass(url, pass) {
+  if (url.match(/:.*:.*@/)) return url;
+  const [a, c] = url.split('@');
+  return `${a}:${pass}@${c}`;
+}
 
 // Validating NODE_ENV as one of
 // 'production', 'development', 'test'
@@ -18,24 +25,20 @@ const env = Joi.attempt(
     .label('NODE_ENV')
 );
 
-function onEnv(obj) {
-  // Get the right config value for current env.
-  // Validate input as object with required 'default'
-  // key and optional 'production', 'development',
-  // and 'test' keys
-  Joi.assert(
-    obj,
-    Joi.object()
-      .keys({
-        default: Joi.any(),
-        production: Joi.any(),
-        development: Joi.any(),
-        test: Joi.any()
-      })
-      .requiredKeys(['default'])
-  );
-  // Get and return config value
-  return obj.hasOwnProperty(env) ? obj[env] : obj.default;
+function onEnv(config, envConfigs) {
+  const customMerge = (objValue, srcValue) => {
+    if (Array.isArray(objValue)) return srcValue;
+  };
+
+  const schema = Joi.object().keys({
+    production: Joi.object(),
+    development: Joi.object(),
+    test: Joi.object()
+  });
+
+  Joi.assert(envConfigs, schema);
+  if (!envConfigs.hasOwnProperty(env)) return config;
+  return mergeWith(config, envConfigs[env], customMerge);
 }
 
-export { env, onEnv };
+export { env, onEnv, dbUrlPass };

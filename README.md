@@ -1,29 +1,35 @@
 # API Boilerplate
 
-[![Version](https://img.shields.io/github/package-json/v/rafamel/-moduleName-.svg)](https://github.com/rafamel/-moduleName-) [![Build Status](https://travis-ci.org/rafamel/-moduleName-.svg)](https://travis-ci.org/rafamel/-moduleName-) [![Coverage](https://img.shields.io/coveralls/rafamel/-moduleName-.svg)](https://coveralls.io/github/rafamel/-moduleName-) [![Dependencies](https://david-dm.org/rafamel/-moduleName-/status.svg)](https://david-dm.org/rafamel/-moduleName-) [![Vulnerabilities](https://snyk.io/test/npm/-moduleName-/badge.svg)](https://snyk.io/test/npm/-moduleName-) [![Issues](https://img.shields.io/github/issues/rafamel/-moduleName-.svg)](https://github.com/rafamel/-moduleName-/issues) [![License](https://img.shields.io/github/license/rafamel/-moduleName-.svg)](https://github.com/rafamel/-moduleName-/blob/master/LICENSE)
+[![Version](https://img.shields.io/github/package-json/v/rafamel/rest-api-boilerplate.svg)](https://github.com/rafamel/rest-api-boilerplate) <!-- [![Build Status](https://travis-ci.org/rafamel/rest-api-boilerplate.svg)](https://travis-ci.org/rafamel/rest-api-boilerplate) [![Coverage](https://img.shields.io/coveralls/rafamel/rest-api-boilerplate.svg)](https://coveralls.io/github/rafamel/rest-api-boilerplate) --> [![Dependencies](https://david-dm.org/rafamel/rest-api-boilerplate/status.svg)](https://david-dm.org/rafamel/rest-api-boilerplate) [![License](https://img.shields.io/github/license/rafamel/rest-api-boilerplate.svg)](https://github.com/rafamel/rest-api-boilerplate/blob/master/LICENSE)
 
-**Express, Objection.js, Passport (token based).**
+**ES2017, Express, Postgress, Objection.js, tokens, and Docker.**
 
 ## Stack
 
+* ES2017 / ES8
 * Express 4
-* Objection.js
-* Jest
-* Authentication via `passport` and `jsonwebtokens`
-* Prettier
+* PostgreSQL & Objection.js (ORM)
+* Token based authentication via `passport` and `jsonwebtokens`
+* Tests and coverage with Jest
+* Docker compose/swarm ready
 
+### More greatness
+
+* Validation via `request-validation`, `joi` and `joi-add`
 * Environment variables via `dotenv-safe`
-* CORS enabled
+* CORS and Gzip compression enabled
 * HTTP headers security via `helmet`
-* Logging with morgan
-* Gzip compression
-* Linting with `eslint` and `prettier`
-* Ad-hoc validation, with `validator` under the hood
+* Logging with `morgan`
+* Git hooks with `husky`
+* Monitoring with `pm2`
+* Linting via `eslint` and `prettier`
 * Ad-hoc simple error handling
-* Git hooks with husky
 
-<!-- API documentation geratorion with apidoc -->
+## Todo
 
-<!-- Continuous integration support with travisCI -->
-
-<!-- Monitoring with pm2 -->
+* Apply Joi config
+* File logs on production
+* E2E tests, CI, Docker tests
+* Documentation
+* Localization
+* Docker deploy

@@ -4,20 +4,26 @@
   "description": "API Boilerplate",
   "main": "index.js",
   "scripts": {
-    "precommit": "npm run checks",
-    "start": "node index.js",
-    "dev": "nodemon --watch src --exec \"clear && run-s lint:src start\"",
+    "precommit": "npm run validate && printf \"\n\" && for ((i=10; i>=0; --i)); do sleep 1 && printf '\r%s: %2d' \"Commiting in\" \"$i\"; done;",
+    "start": "NODE_ENV=production pm2 start index.js --name rest-api",
+    "stop": "pm2 stop rest-api",
+    "dev": "nodemon --watch src --exec \"clear && npm run lint:src && node index.js\"",
     "test": "npm run lint:test && jest ./test/.*.test.js --runInBand",
     "test:watch": "nodemon --watch test --exec \"clear && npm t\"",
-    "fix":
-      "prettier --ignore-path .gitignore --write \"*/**/*.json\" \"**/*.{js,md}\"",
+    "fix": "prettier --ignore-path .gitignore --write \"*/**/*.json\" \"**/*.{js,md}\"",
     "lint": "eslint \"**/*.js\" --ignore-path .gitignore",
     "lint:src": "eslint ./src --ext .js --ignore-path .gitignore",
     "lint:test": "eslint ./test --ext .js --ignore-path .gitignore",
     "lint:md": "markdownlint *.md --config markdown.json",
-    "checks": "run-s lint lint:md && jest ./test/.*.test.js && npm outdated",
-    "update:packages":
-      "rm -rf node_modules && rm package-lock.json && npm update --save/save-dev && npm install && npm outdated"
+    "validate": "run-s lint lint:md && jest ./test/.*.test.js && (npm outdated || true)",
+    "update": "npm update --save/save-dev && npm outdated",
+    "docker:build": "docker build --rm -t rafamel/rest-api . && (docker rmi $(docker images -q -f dangling=true) || true)",
+    "docker:ps": "docker-compose -p production ps && docker-compose -p development ps",
+    "docker:start": "docker-compose -p production -f docker-compose.yml -f docker-compose.prod.yml ${EX:-up -d}",
+    "docker:stop": "EX=stop npm run docker:start",
+    "docker:dev": "docker-compose -p development -f docker-compose.yml -f docker-compose.dev.yml ${EX:-up}",
+    "docker:knex": "EX=\"exec api npx knex\" npm run docker:start",
+    "docker:knex:dev": "EX=\"exec api npx knex\" npm run docker:dev"
   },
   "author": "Rafa Mel",
   "license": "MIT",
@@ -38,6 +44,7 @@
     "joi-add": "^0.6.0-0",
     "jsonwebtoken": "^8.1.0",
     "knex": "^0.14.2",
+    "lodash.mergewith": "^4.6.1",
     "moment": "^2.19.3",
     "morgan": "^1.9.0",
     "ms": "^2.1.1",
@@ -46,24 +53,26 @@
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1",
     "pg": "^7.4.0",
-    "rand-token": "^0.4.0",
+    "pm2": "^2.9.3",
+    "pm2-docker": "^2.1.0",
     "request-validation": "^0.1.2-0"
   },
   "devDependencies": {
     "@types/jest": "^22.1.2",
     "@types/joi": "^13.0.3",
     "babel-eslint": "^8.2.1",
+    "babel-jest": "^22.2.2",
     "eslint": "^4.11.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jest": "^21.3.2",
+    "eslint-plugin-jest": "^21.12.1",
     "eslint-plugin-node": "^6.0.0",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
     "husky": "^0.14.3",
-    "jest-cli": "^22.2.2",
+    "jest-cli": "^22.3.0",
     "markdownlint-cli": "^0.7.1",
     "nodemon": "^1.12.1",
     "npm-run-all": "^4.1.1",
@@ -74,6 +83,12 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "collectCoverage": true
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/test/"
+    ]
   }
 }
