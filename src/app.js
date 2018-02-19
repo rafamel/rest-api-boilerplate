@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import compress from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
+import { options as validationOptions } from 'request-validation';
 import dbConnect from '@/db/connect';
 import passportConnect from '@/passport';
 import routesHandler from '@/handler';
@@ -22,6 +23,7 @@ app.use(cors()); // Enable CORS
 // Prepare
 dbConnect(); // Knex & Objection.js database connection
 passportConnect(app); // Passport
+validationOptions({ defaults: config.validation }); // request joi options
 
 // Routes
 const use = routesHandler(app);

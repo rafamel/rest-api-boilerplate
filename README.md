@@ -27,7 +27,6 @@
 
 ## Todo
 
-* Apply Joi config
 * File logs on production
 * E2E tests, CI, Docker tests
 * Documentation

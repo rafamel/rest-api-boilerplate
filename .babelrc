@@ -1,8 +1,22 @@
 {
-  "presets": [["env", { "targets": { "node": "current" } }]],
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ],
   "plugins": [
     "transform-class-properties",
-    ["transform-object-rest-spread", { "useBuiltIns": true }],
+    [
+      "transform-object-rest-spread",
+      {
+        "useBuiltIns": true
+      }
+    ],
     [
       "babel-plugin-root-import",
       {

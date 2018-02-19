@@ -20,7 +20,7 @@ const config = {
     jwtAuthExpiry: '15m',
     refreshToken: { expiry: '45d', renewRemaining: '15d' }
   },
-  joi: {
+  validation: {
     abortEarly: false,
     convert: false,
     stripUnknown: true,
