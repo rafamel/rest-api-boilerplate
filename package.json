@@ -7,6 +7,7 @@
   "main": "index.js",
   "scripts": {
     "precommit": "MSG='Committing in:' npm run validate",
+    "docker": "npm run --prefix ./docker",
     "start": "NODE_ENV=production pm2 start index.js --name rest-api",
     "stop": "pm2 stop rest-api",
     "dev": "nodemon -w ./src -x \"clear && (npm run lint:src & node index.js)\"",
@@ -19,14 +20,7 @@
     "lint:md": "markdownlint *.md --config markdown.json",
     "validate": "run-s lint lint:md && jest ./test/.*.test.js && npm run outdated",
     "update": "npm update --save/save-dev && npm outdated",
-    "outdated": "if !(npm outdated) && [ -n \"$MSG\" ]; then printf \"\n\" && for ((i=10; i>=0; --i)); do sleep 1 && printf '\r%s %2d' \"$MSG\" \"$i\"; done; fi;",
-    "docker:build": "docker build --rm -t rafamel/rest-api . && (docker rmi $(docker images -q -f dangling=true) || true)",
-    "docker:ps": "x=ps run-p docker:prod docker:dev",
-    "docker:stop": "x=stop run-p docker:start docker:dev",
-    "docker:prod": "docker-compose -p production -f docker-compose.yml -f docker-compose.prod.yml ${x:-up}",
-    "docker:prod:knex": "x='exec api npx knex' npm run docker:prod",
-    "docker:dev": "docker-compose -p development -f docker-compose.yml -f docker-compose.dev.yml ${x:-up}",
-    "docker:dev:knex": "x='exec api npx knex' npm run docker:dev"
+    "outdated": "if !(npm outdated) && [ -n \"$MSG\" ]; then printf \"\n\" && for ((i=10; i>=0; --i)); do sleep 1 && printf '\r%s %2d' \"$MSG\" \"$i\"; done; fi;"
   },
   "dependencies": {
     "babel-plugin-root-import": "^5.1.0",
@@ -39,6 +33,7 @@
     "compression": "^1.7.1",
     "cors": "^2.8.4",
     "dotenv-safe": "^4.0.4",
+    "env-cmd": "^7.0.0",
     "express": "^4.16.2",
     "helmet": "^3.9.0",
     "joi": "^13.0.2",

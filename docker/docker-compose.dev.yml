@@ -8,7 +8,7 @@ services:
       DB_PASS: db_dev_pass
     volumes:
       - type: bind
-        source: ./
+        source: ../
         target: /usr/src/app
     command: npx nodemon --watch src --exec "npm run lint:src & node index.js"
   db:

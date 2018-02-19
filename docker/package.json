@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "ps": "x=ps run-p prod dev",
+    "build": "docker build --rm -f ./Dockerfile -t rafamel/rest-api ../ && (docker rmi $(docker images -q -f dangling=true) || true)",
+    "prod": "env-cmd ../.env docker-compose -p production -f ./docker-compose.yml -f ./docker-compose.prod.yml ${x:-up}",
+    "dev": "env-cmd ../.env docker-compose -p development -f ./docker-compose.yml -f ./docker-compose.dev.yml ${x:-up}",
+    "stop": "x=stop npm run",
+    "knex": "x='exec api npx knex' npm run",
+    "sh": "x='exec api sh' npm run"
+  }
+}
