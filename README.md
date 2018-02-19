@@ -6,7 +6,7 @@
 
 ## Stack
 
-* ES2017 / ES8
+* ES2017
 * Express 4
 * PostgreSQL & Objection.js (ORM)
 * Token based authentication via `passport` and `jsonwebtokens`

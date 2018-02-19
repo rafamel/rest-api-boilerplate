@@ -1,6 +1,6 @@
-import { Model, AjvValidator } from 'objection';
-import PublicError, { ErrorTypes } from '@/utils/public-error';
-import config from '@/config';
+const { Model, AjvValidator } = require('objection');
+const { PublicError, ErrorTypes } = require('~/utils/public-error');
+const config = require('~/config');
 
 class ParentQueryBuilder extends Model.QueryBuilder {
   notNone(label = 'Item') {
@@ -50,4 +50,4 @@ class ParentModel extends Model {
   }
 }
 
-export default ParentModel;
+module.exports = ParentModel;

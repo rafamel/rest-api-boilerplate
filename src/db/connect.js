@@ -1,9 +1,8 @@
-import objection from 'objection';
-import Knex from 'knex';
-import config from '@/config';
+const Knex = require('knex');
+const { Model } = require('objection');
+const config = require('~/config');
 
-export default function dbConnect() {
-  const Model = objection.Model;
+module.exports = function dbConnect() {
   const knex = Knex(config.db);
   Model.knex(knex);
-}
+};

@@ -1,10 +1,10 @@
-import PublicError, { ErrorTypes } from '@/utils/public-error';
-import { batchDispatch } from '@/middlewares/dispatch';
-import Auth from './auth.model';
-import User from './user.model';
+const { PublicError, ErrorTypes } = require('~/utils/public-error');
+const { batchDispatch } = require('~/middlewares/dispatch');
+const Auth = require('./auth.model');
+const User = require('./user.model');
 
 // index, show, create, update, patch, delete
-export default batchDispatch({
+module.exports = batchDispatch({
   async login(req) {
     const user = await User.query()
       .first()
@@ -52,20 +52,19 @@ export default batchDispatch({
     return User.query()
       .findById(req.params.id)
       .notNone()
-      .then((item) =>
-        item
+      .then((m) =>
+        m
           .$query()
           .patch(req.body)
           .returning('*')
       );
   },
-
   async delete(req) {
     return User.query()
       .findById(req.params.id)
       .notNone()
-      .then((item) =>
-        item
+      .then((m) =>
+        m
           .$query()
           .delete()
           .runAfter((x) => x === 1)

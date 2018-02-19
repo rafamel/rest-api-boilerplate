@@ -1,9 +1,9 @@
-import path from 'path';
-import Model from '@/db/Model';
-import beforeUnique from 'objection-before-and-unique';
-import PublicError, { ErrorTypes } from '@/utils/public-error';
+const path = require('path');
+const Model = require('~/db/Model');
+const beforeUnique = require('objection-before-and-unique');
+const { PublicError, ErrorTypes } = require('~/utils/public-error');
 
-export default class Todo extends beforeUnique({
+module.exports = class Todo extends beforeUnique({
   unique: [{ col: 'name', label: 'Name', insensitive: true, for: ['user_id'] }]
 })(Model) {
   // Table Name
@@ -42,4 +42,4 @@ export default class Todo extends beforeUnique({
     }
     return this;
   }
-}
+};

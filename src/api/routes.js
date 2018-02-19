@@ -1,6 +1,5 @@
-import { Router } from 'express';
+const router = require('express').Router();
 
-const router = Router();
 router.use('/user', require('./user/user.routes'));
 router.use('/todo', require('./todo/todo.routes'));
 

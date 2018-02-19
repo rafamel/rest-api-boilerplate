@@ -1,13 +1,13 @@
-import path from 'path';
-import Model from '@/db/Model';
-import PublicError, { ErrorTypes } from '@/utils/public-error';
-import config from '@/config';
-import ms from 'ms';
-import moment from 'moment';
-import crypto from 'crypto';
-import jwt from 'jsonwebtoken';
+const path = require('path');
+const Model = require('~/db/Model');
+const { PublicError, ErrorTypes } = require('~/utils/public-error');
+const config = require('~/config');
+const ms = require('ms');
+const moment = require('moment');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
-export default class RefreshToken extends Model {
+module.exports = class RefreshToken extends Model {
   // Table Name
   static tableName = 'refresh_token';
 
@@ -66,7 +66,7 @@ export default class RefreshToken extends Model {
     };
   }
 
-  // Instance Properties/Methods
+  // Instance Methods
   get fullToken() {
     return `${this.id}.${this.token}`;
   }
@@ -118,4 +118,4 @@ export default class RefreshToken extends Model {
       expires_in: ms(config.auth.jwtAuthExpiry)
     };
   }
-}
+};

@@ -1,10 +1,9 @@
-import { RequestValidation, ValidationSchema } from 'request-validation';
-import Joi from '@/utils/joi';
+const Joi = require('joi-add')();
+const { RequestValidation, ValidationSchema } = require('request-validation');
 
 const schema = new ValidationSchema({
   body: {
     username: Joi.string()
-      .addLabel('Username')
       .add(
         (it) => it.min(6).max(16),
         'Username should have a length of 6 to 16 characters.'
@@ -12,9 +11,9 @@ const schema = new ValidationSchema({
       .add(
         (it) => it.regex(/^[a-zA-Z0-9_]+$/),
         'Username should only contain letters, numbers, and underscores (_).'
-      ),
+      )
+      .addLabel('Username'),
     password: Joi.string()
-      .addLabel('Password')
       .add(
         (it) => it.min(8).max(20),
         'Password should have a length of 8 to 20 characters.'
@@ -26,14 +25,15 @@ const schema = new ValidationSchema({
       .add(
         (it) => it.regex(/[a-zA-Z]/),
         'Password should contain some letters.'
-      ),
+      )
+      .addLabel('Password'),
     email: Joi.string()
-      .addLabel('Email')
       .email()
+      .addLabel('Email')
   }
 });
 
-export default new RequestValidation({
+module.exports = new RequestValidation({
   register: schema
     .useBody('username', 'password', 'email')
     .presence('required'),

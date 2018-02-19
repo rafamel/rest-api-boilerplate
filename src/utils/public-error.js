@@ -1,5 +1,5 @@
-import Joi from '@/utils/joi';
-import config from '@/config';
+const Joi = require('~/utils/joi');
+const config = require('~/config');
 
 class ErrorType {
   constructor(name, status) {
@@ -60,4 +60,7 @@ class PublicError extends Error {
   }
 }
 
-export { PublicError as default, ErrorTypes };
+module.exports = {
+  PublicError,
+  ErrorTypes
+};

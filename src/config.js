@@ -1,4 +1,4 @@
-import { env, onEnv, dbUrlPass } from '@/utils/config-utils';
+const { env, onEnv, dbUrlPass } = require('~/utils/config-utils');
 
 // Default config
 const config = {
@@ -45,4 +45,4 @@ onEnv(config, {
   }
 });
 
-export default config;
+module.exports = config;

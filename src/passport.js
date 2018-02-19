@@ -1,6 +1,8 @@
-import passport from 'passport';
-import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
-import config from '@/config';
+const passport = require('passport');
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+// const User = requireAt.model('user');
+const config = require('./config');
 
 // JSONWebTokens
 const jwtOptions = {
@@ -17,7 +19,7 @@ const jwt = new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
   return done(null, jwtPayload.user);
 });
 
-export default (app) => {
+module.exports = (app) => {
   app.use(passport.initialize());
   passport.use('jwt', jwt);
 };

@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import PublicError, { ErrorTypes } from '@/utils/public-error';
-import authorize from '@/middlewares/authorize';
-import validate from './user.validation';
-import controller from './user.controller';
+const router = require('express').Router();
+const { PublicError, ErrorTypes } = require('~/utils/public-error');
+const { authorize } = require('~/middlewares/authorize');
+const validate = require('./user.validation');
+const controller = require('./user.controller');
 
 const verifyUser = (req, res, next) => {
   if (req.user.id !== Number(req.params.id)) {
@@ -16,7 +16,6 @@ const verifyUser = (req, res, next) => {
 };
 
 // User - /user
-const router = Router();
 router.post('/register', validate.register, controller.register);
 router.post('/login', validate.login, controller.login);
 router.post('/refresh', validate.refresh, controller.refresh);

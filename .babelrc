@@ -20,8 +20,8 @@
     [
       "babel-plugin-root-import",
       {
-        "rootPathPrefix": "@",
-        "rootPathSuffix": "src"
+        "rootPathPrefix": "~",
+        "rootPathSuffix": "src/"
       }
     ]
   ]

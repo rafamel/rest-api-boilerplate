@@ -1,10 +1,9 @@
-import path from 'path';
-import Joi from '@/utils/joi';
-import mergeWith from 'lodash.mergewith';
-import dotEnvSafe from 'dotenv-safe';
+const path = require('path');
+const Joi = require('~/utils/joi');
+const mergeWith = require('lodash.mergewith');
 
 // Load environment variables from file
-dotEnvSafe.load({
+require('dotenv-safe').load({
   path: path.join(__dirname, '../../.env'),
   sample: path.join(__dirname, '../../.env.example')
 });
@@ -41,4 +40,4 @@ function onEnv(config, envConfigs) {
   return mergeWith(config, envConfigs[env], customMerge);
 }
 
-export { env, onEnv, dbUrlPass };
+module.exports = { env, onEnv, dbUrlPass };

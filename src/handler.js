@@ -1,8 +1,7 @@
-import PublicError, { ErrorTypes } from '@/utils/public-error';
-import { Model } from 'objection';
-import config from '@/config';
+const { PublicError, ErrorTypes } = require('./utils/public-error');
+const { ValidationError, NotFoundError } = require('objection').Model;
+const config = require('./config');
 
-const { ValidationError, NotFoundError } = Model;
 const schemes = {
   default: {
     data(req, res, data) {
@@ -83,6 +82,8 @@ function errorHandler(err) {
     }
 
     return new PublicError(null, { err: err });
+
+    // Catch if error
   } catch (e) {
     return new PublicError(null, { err: e });
   }
@@ -94,7 +95,11 @@ function handler(appOrRouter, scheme) {
       ...args,
       (req, res, next) => {
         // 404 Error
-        next(new PublicError('Not Found', { type: ErrorTypes.NotFound }));
+        next(
+          new PublicError('Not Found', {
+            type: ErrorTypes.NotFound
+          })
+        );
       },
       (data, req, res, next) => {
         // Data delivery
@@ -103,7 +108,6 @@ function handler(appOrRouter, scheme) {
         }
         // Error handler
         const err = errorHandler(data);
-        // eslint-disable-next-line
         if (!config.production && err.trace) console.error(err);
         scheme.error(req, res, err);
       }
@@ -111,7 +115,7 @@ function handler(appOrRouter, scheme) {
   };
 }
 
-export default (appOrRouter) => {
+module.exports = (appOrRouter) => {
   const handlers = {};
   Object.keys(schemes).forEach((key) => {
     handlers[key] = handler(appOrRouter, schemes[key]);
