@@ -10,11 +10,11 @@ const config = require('~/config');
 const app = express();
 // Middleware
 app.use(morgan(config.logs)); // Logger
+app.use(cors()); // Enable CORS
+app.use(helmet()); // Secure headers
+app.use(compress()); // Gzip compression
 app.use(bodyParser.json()); // Parse JSON
 app.use(bodyParser.urlencoded({ extended: false })); // Parse urlencoded
-app.use(compress()); // Gzip compression
-app.use(helmet()); // Secure headers
-app.use(cors()); // Enable CORS
 
 // Prepare
 require('~/db/connect')(); // Knex & Objection.js database connection

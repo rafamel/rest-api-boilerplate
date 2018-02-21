@@ -2,17 +2,32 @@
 ####################
 docker/etc
 
-# Node, Frameworks, Editors #
-#############################
+# Node and common setups #
+##########################
 _test.js
+build
+dist
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
 coverage
 node_modules
-npm-debug.log
+.cache
+
+# Frameworks and Editors #
+##########################
+.lock-wscript
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 # Compiled source #
 ###################
@@ -36,18 +51,41 @@ npm-debug.log
 *.tar
 *.zip
 
-# Logs and databases #
-######################
+# Logs, databases, and Runtime data #
+#####################################
 *.log
 *.sql
 *.sqlite
+*.db
+*.pid
+*.seed
 
 # OS generated files #
 ######################
-.DS_Store
-.DS_Store?
 ._*
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+*.DS_Store
 .Spotlight-V100
 .Trashes
-ehthumbs.db
 Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+.AppleDouble
+.LSOverride
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+Desktop.ini
+$RECYCLE.BIN/
