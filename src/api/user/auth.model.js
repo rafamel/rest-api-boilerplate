@@ -1,11 +1,11 @@
 const path = require('path');
 const Model = require('~/db/Model');
 const { PublicError, ErrorTypes } = require('~/utils/public-error');
-const config = require('~/config');
 const ms = require('ms');
 const moment = require('moment');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const auth = require('config').get('auth');
 
 module.exports = class RefreshToken extends Model {
   // Table Name
@@ -45,7 +45,7 @@ module.exports = class RefreshToken extends Model {
           token: `${crypto.randomBytes(40).toString('hex')}`,
           expires: String(
             moment()
-              .add(ms(config.auth.refreshToken.expiry), 'ms')
+              .add(ms(auth.refreshToken.expiry), 'ms')
               .toISOString()
           )
         };
@@ -86,7 +86,7 @@ module.exports = class RefreshToken extends Model {
 
     // Create new refreshToken if needed
     const remaining = expiry.subtract(
-      ms(config.auth.refreshToken.renewRemaining),
+      ms(auth.refreshToken.renewRemaining),
       'ms'
     );
     if (currentUnix >= remaining.unix()) {
@@ -103,9 +103,9 @@ module.exports = class RefreshToken extends Model {
         iat: moment().unix(),
         user: user
       };
-      return jwt.sign(payload, config.auth.jwtSecret, {
-        algorithm: config.auth.jwtAlgorithm,
-        expiresIn: config.auth.jwtAuthExpiry
+      return jwt.sign(payload, auth.jwtSecret, {
+        algorithm: auth.jwtAlgorithm,
+        expiresIn: auth.jwtAuthExpiry
       });
     }
     // Check refresh token
@@ -115,7 +115,7 @@ module.exports = class RefreshToken extends Model {
       token_type: 'bearer',
       access_token: generateAccessToken(),
       refresh_token: fullToken,
-      expires_in: ms(config.auth.jwtAuthExpiry)
+      expires_in: ms(auth.jwtAuthExpiry)
     };
   }
 };

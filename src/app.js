@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const compress = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
-const config = require('~/config');
+const config = require('config');
 
 // Initialize Express
 const app = express();
@@ -19,13 +19,13 @@ app.use(bodyParser.urlencoded({ extended: false })); // Parse urlencoded
 // Prepare
 require('~/db/connect')(); // Knex & Objection.js database connection
 require('~/passport')(app); // Passport
-require('request-validation').options({ defaults: config.validation });
+require('request-validation').options({ defaults: config.get('validation') });
 
 // Routes
 const use = require('~/handler')(app);
 use.api('/api', require('~/api/routes'));
 use.default(); // Default handler for other routes
 
-app.listen(config.port, () => {
-  console.log('Server running on port', config.port);
+app.listen(config.get('port'), () => {
+  console.log('Server running on port', config.get('port'));
 });

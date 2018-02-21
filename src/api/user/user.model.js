@@ -2,13 +2,12 @@ const path = require('path');
 const Joi = require('~/utils/joi');
 const Model = require('~/db/Model');
 const beforeUnique = require('objection-before-and-unique');
-
-const config = require('~/config');
 const { promisify } = require('util');
 const bcrypt = require('bcrypt-nodejs');
 const genSaltAsync = promisify(bcrypt.genSalt);
 const hashAsync = promisify(bcrypt.hash);
 const compareAsync = promisify(bcrypt.compare);
+const auth = require('config').get('auth');
 
 module.exports = class User extends beforeUnique({
   before: [
@@ -16,7 +15,7 @@ module.exports = class User extends beforeUnique({
       if (instance.password) {
         instance.hash = await hashAsync(
           instance.password,
-          await genSaltAsync(config.auth.jwtSaltWorkFactor),
+          await genSaltAsync(auth.jwtSaltWorkFactor),
           null
         );
         delete instance.password;

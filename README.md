@@ -7,22 +7,22 @@
 ## Stack
 
 * ES2017
-* Express 4
-* PostgreSQL & Objection.js (ORM)
-* Token based authentication via `passport` and `jsonwebtokens`
-* Tests and coverage with Jest
-* Docker compose/swarm ready
+* [Express 4](https://expressjs.com/)
+* PostgreSQL & [Objection.js](https://github.com/vincit/objection.js) (ORM)
+* Token based authentication via [`passport`](http://passportjs.org/) and [`jsonwebtoken`](https://github.com/auth0/node-jsonwebtoken)
+* Tests and coverage with [Jest](https://facebook.github.io/jest/)
+* [Docker](https://www.docker.com/) compose/swarm ready
 
 ### More greatness
 
-* Validation via `request-validation`, `joi` and `joi-add`
-* Environment variables via `dotenv-safe`
-* CORS and Gzip compression enabled
-* HTTP headers security via `helmet`
-* Logging with `morgan`
-* Git hooks with `husky`
-* Monitoring with `pm2`
-* Linting via `eslint` and `prettier`
+* Validation via [`request-validation`](https://github.com/rafamel/request-validation), [`joi`](https://github.com/hapijs/joi/) and [`joi-add`](https://github.com/rafamel/joi-add)
+* [CORS](https://github.com/expressjs/cors) and [Gzip compression](https://github.com/expressjs/compression) enabled
+* HTTP headers security via [`helmet`](https://github.com/helmetjs/helmet)
+* Logging with [`morgan`](https://github.com/expressjs/morgan)
+* Git hooks with [`husky`](https://github.com/typicode/husky)
+* Monitoring with [`pm2`](https://github.com/Unitech/pm2)
+* Linting via [`eslint`](https://eslint.org/) and [`prettier`](https://prettier.io/)
+* Environment configuration via [`dotenv-safe`](https://github.com/rolodato/dotenv-safe) (for secrets) and [`node-config`](https://github.com/lorenwest/node-config)
 * Ad-hoc simple error handling
 
 ## Todo

@@ -1,8 +1,8 @@
 const Knex = require('knex');
 const { Model } = require('objection');
-const config = require('~/config');
+const db = require('config').get('db');
 
 module.exports = function dbConnect() {
-  const knex = Knex(config.db);
+  const knex = Knex(db);
   Model.knex(knex);
 };

@@ -1,6 +1,6 @@
 const { Model, AjvValidator } = require('objection');
 const { PublicError, ErrorTypes } = require('~/utils/public-error');
-const config = require('~/config');
+const production = require('config').get('production');
 
 class ParentQueryBuilder extends Model.QueryBuilder {
   notNone(label = 'Item') {
@@ -28,7 +28,7 @@ class ParentModel extends Model {
       onCreateAjv: (ajv) => {},
       options: {
         allErrors: false,
-        validateSchema: !config.production,
+        validateSchema: !production,
         ownProperties: true,
         v5: true
       }

@@ -1,10 +1,10 @@
 const Joi = require('~/utils/joi');
-const config = require('~/config');
+const validation = require('config').get('validation');
 
 class ErrorType {
   constructor(name, status) {
     // Validate input
-    Joi.assert(name, Joi.string().label('name'), config.joi);
+    Joi.assert(name, Joi.string().label('name'), validation);
     Joi.assert(
       status,
       Joi.number()
@@ -12,7 +12,7 @@ class ErrorType {
         .min(100)
         .max(599)
         .label('status'),
-      config.joi
+      validation
     );
 
     this.name = name;

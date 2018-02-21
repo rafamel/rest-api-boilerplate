@@ -1,7 +1,6 @@
-const { env, onEnv, dbUrlPass } = require('~/utils/config-utils');
+const { env, dbUrlPass } = require('~/utils/config-utils');
 
-// Default config
-const config = {
+module.exports = {
   production: env === 'production',
   port: process.env.PORT || 3000,
   logs: 'combined',
@@ -28,21 +27,3 @@ const config = {
     language: { root: 'Value', key: '{{!label}} ' }
   }
 };
-
-onEnv(config, {
-  development: {
-    logs: 'dev',
-    db: { debug: true },
-    auth: { jwtSaltWorkFactor: 1, jwtAuthExpiry: '15d' }
-  },
-  test: {
-    logs: 'dev',
-    auth: {
-      jwtSaltWorkFactor: 1,
-      jwtAuthExpiry: '5s',
-      refreshToken: { expiry: '10s', renewRemaining: '5s' }
-    }
-  }
-});
-
-module.exports = config;

@@ -2,16 +2,16 @@ const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 // const User = requireAt.model('user');
-const config = require('./config');
+const auth = require('config').get('auth');
 
 // JSONWebTokens
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
-  secretOrKey: config.auth.jwtSecret,
-  algorithms: config.auth.jwtAlgorithm,
+  secretOrKey: auth.jwtSecret,
+  algorithms: auth.jwtAlgorithm,
   json: {
-    algorithm: config.auth.jwtAlgorithm,
-    maxAge: config.auth.jwtAuthExpiry
+    algorithm: auth.jwtAlgorithm,
+    maxAge: auth.jwtAuthExpiry
   }
 };
 const jwt = new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
