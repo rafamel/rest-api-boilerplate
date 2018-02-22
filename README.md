@@ -15,20 +15,19 @@
 
 ### More greatness
 
-* Validation via [`request-validation`](https://github.com/rafamel/request-validation), [`joi`](https://github.com/hapijs/joi/) and [`joi-add`](https://github.com/rafamel/joi-add)
+* Validation via [`joi`](https://github.com/hapijs/joi/), [`joi-add`](https://github.com/rafamel/joi-add), and [`request-validation`](https://github.com/rafamel/request-validation)
 * [CORS](https://github.com/expressjs/cors) and [Gzip compression](https://github.com/expressjs/compression) enabled
 * HTTP headers security via [`helmet`](https://github.com/helmetjs/helmet)
 * Logging with [`morgan`](https://github.com/expressjs/morgan)
 * Git hooks with [`husky`](https://github.com/typicode/husky)
 * Monitoring with [`pm2`](https://github.com/Unitech/pm2)
 * Linting via [`eslint`](https://eslint.org/) and [`prettier`](https://prettier.io/)
-* Environment configuration via [`dotenv-safe`](https://github.com/rolodato/dotenv-safe) (for secrets) and [`node-config`](https://github.com/lorenwest/node-config)
+* Environment configuration via [`dotenv-safe`](https://github.com/rolodato/dotenv-safe), [`dotenv-cli`](https://github.com/entropitor/dotenv-cli), and [`node-config`](https://github.com/lorenwest/node-config)
 * Ad-hoc simple error handling
 
 ## Todo
 
-* File logs on production
 * E2E tests, CI, Docker tests
 * Documentation
 * Localization
-* Docker deploy
+* Docker: deploy

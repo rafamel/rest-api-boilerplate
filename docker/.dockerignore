@@ -1,17 +1,16 @@
 # Project Specific #
 ####################
-docker/etc
+/docker
 /logs
 
 # Node and common setups #
 ##########################
+.git
+.gitignore
+Dockerfile
 _test.js
 build
 dist
-.env
-.env.*
-!.env.example
-!.env.*.example
 coverage
 node_modules
 .cache

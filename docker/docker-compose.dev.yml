@@ -1,11 +1,11 @@
-version: "3.2"
+version: "3.4"
 services:
   api:
     ports:
       - "3000:3000"
     environment:
       NODE_ENV: development
-      DB_PASS: db_dev_pass
+      DB_URL: postgres://postgres:db_dev_pass@db:5432/postgres
     volumes:
       - type: bind
         source: ../

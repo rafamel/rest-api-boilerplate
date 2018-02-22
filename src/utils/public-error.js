@@ -27,7 +27,7 @@ const ErrorTypes = {
   RequestValidation: new ErrorType('RequestValidationError', 400),
   Database: new ErrorType('DatabaseError', 500),
   DatabaseValidation: new ErrorType('DatabaseValidationError', 500),
-  DatabaseNotFound: new ErrorType('DatabaseNotFoundError', 400)
+  DatabaseNotFound: new ErrorType('DatabaseNotFoundError', 500)
 };
 
 class PublicError extends Error {

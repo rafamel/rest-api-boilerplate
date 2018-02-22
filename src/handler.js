@@ -1,5 +1,6 @@
 const { PublicError, ErrorTypes } = require('./utils/public-error');
 const { ValidationError, NotFoundError } = require('objection').Model;
+const logger = require('~/utils/logger');
 const production = require('config').get('production');
 
 const schemes = {
@@ -108,7 +109,8 @@ function handler(appOrRouter, scheme) {
         }
         // Error handler
         const err = errorHandler(data);
-        if (!production && err.trace) console.error(err);
+        if (err.status === 500) logger.error(err.message, err.trace);
+        else logger.debug(err.message, !production && err.trace);
         scheme.error(req, res, err);
       }
     );

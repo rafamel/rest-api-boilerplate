@@ -1,5 +1,8 @@
 module.exports = {
-  logs: 'dev',
+  logs: {
+    morgan: 'dev',
+    transports: { console: false, file: false }
+  },
   auth: {
     jwtSaltWorkFactor: 1,
     jwtAuthExpiry: '5s',

@@ -1,12 +1,20 @@
-const { env, dbUrlPass } = require('~/utils/config-utils');
+const path = require('path');
+require('dotenv-safe').load({
+  path: path.join(__dirname, '../.env'),
+  sample: path.join(__dirname, '../.env.example')
+});
 
 module.exports = {
-  production: env === 'production',
+  production: process.env.NODE_ENV === 'production',
   port: process.env.PORT || 3000,
-  logs: 'combined',
+  logs: {
+    morgan: 'combined',
+    transports: { console: false, file: true },
+    levels: { console: 'debug', file: 'info' }
+  },
   db: {
     client: 'pg',
-    connection: dbUrlPass(process.env.DB_URL, process.env.DB_PASS),
+    connection: process.env.DB_URL,
     pool: { min: 2, max: 10 },
     debug: false,
     migrations: { directory: './src/db/migrations' },

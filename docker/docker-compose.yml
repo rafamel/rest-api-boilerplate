@@ -1,13 +1,11 @@
-version: "3.2"
+version: "3.4"
 services:
   api:
-    image: rafamel/rest-api
+    image: ${DOCKER_IMAGE_NAME}
     depends_on:
       - db
     networks:
       - backend
-    environment:
-      DB_URL: postgres://postgres@db:5432/postgres
     deploy:
       restart_policy:
         condition: on-failure
