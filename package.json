@@ -1,13 +1,12 @@
 {
   "name": "rest-api-boilerplate",
   "description": "API Boilerplate",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "author": "Rafa Mel",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
     "precommit": "cross-env MSG=\"Committing in:\" nps validate",
-    "docker": "npm run --prefix ./docker",
     "start": "nps start",
     "stop": "nps stop",
     "dev": "nps dev",
@@ -20,13 +19,16 @@
     "test:watch": "nps test.watch",
     "validate": "nps validate",
     "update": "nps update",
-    "clean": "nps clean"
+    "clean": "nps clean",
+    "add:docker": "nps add.docker",
+    "add:captain": "nps add.captain"
   },
   "dependencies": {
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
@@ -34,8 +36,7 @@
     "config": "^2.0.1",
     "cors": "^2.8.4",
     "cross-env": "^5.2.0",
-    "dotenv-cli": "^1.4.0",
-    "dotenv-safe": "^6.0.0",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "helmet": "^3.13.0",
     "joi": "^13.6.0",
@@ -54,6 +55,7 @@
     "pm2": "^3.0.4",
     "pm2-docker": "^2.1.0",
     "request-validation": "^0.1.2-0",
+    "shx": "^0.3.2",
     "winston": "^2.4.0"
   },
   "devDependencies": {
@@ -61,7 +63,6 @@
     "@types/joi": "^13.4.4",
     "babel-eslint": "^9.0.0",
     "babel-jest": "^23.4.2",
-    "babel-preset-env": "^1.7.0",
     "concurrently": "^4.0.1",
     "eslint": "^5.5.0",
     "eslint-config-prettier": "^3.0.1",
@@ -77,8 +78,7 @@
     "jest-cli": "^23.5.0",
     "markdownlint-cli": "^0.13.0",
     "onchange": "^4.1.0",
-    "prettier": "^1.14.2",
-    "shx": "^0.3.2"
+    "prettier": "^1.14.2"
   },
   "engines": {
     "node": ">=8.0.0"

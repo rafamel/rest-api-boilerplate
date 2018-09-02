@@ -11,7 +11,7 @@
 * PostgreSQL & [Objection.js](https://github.com/vincit/objection.js) (ORM)
 * Token based authentication via [`passport`](http://passportjs.org/) and [`jsonwebtoken`](https://github.com/auth0/node-jsonwebtoken)
 * Tests and coverage with [Jest](https://facebook.github.io/jest/)
-* [Docker](https://www.docker.com/) compose/swarm ready
+* [Docker](https://www.docker.com/) & [CaptainDuckDuck](https://captainduckduck.com) ready
 * Develop on MacOS/Linux/Windows
 
 ### More greatness
@@ -23,12 +23,11 @@
 * Git hooks with [`husky`](https://github.com/typicode/husky)
 * Monitoring with [`pm2`](https://github.com/Unitech/pm2)
 * Linting via [`eslint`](https://eslint.org/) and [`prettier`](https://prettier.io/)
-* Environment configuration via [`dotenv-safe`](https://github.com/rolodato/dotenv-safe), [`dotenv-cli`](https://github.com/entropitor/dotenv-cli), and [`node-config`](https://github.com/lorenwest/node-config)
+* Environment configuration via [`dotenv`](https://github.com/motdotla/dotenv) and [`node-config`](https://github.com/lorenwest/node-config)
 * Ad-hoc simple error handling
 
 ## Todo
 
-* E2E tests, CI, Docker tests
+* E2E tests, CI
 * Documentation
 * Localization
-* Docker: deploy

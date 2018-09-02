@@ -1,4 +1,5 @@
 module.exports = {
+  port: 3061,
   logs: {
     morgan: 'dev',
     transports: { console: false, file: false }

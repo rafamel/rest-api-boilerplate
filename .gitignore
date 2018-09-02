@@ -1,6 +1,5 @@
 # Project Specific #
 ####################
-docker/etc
 /logs
 
 # Node and common setups #

@@ -1,18 +1,15 @@
 # Project Specific #
 ####################
-/docker
 /logs
 
 # Node and common setups #
 ##########################
-.git
-.gitignore
-Dockerfile
 _test.js
 build
 dist
 coverage
 node_modules
+npm-debug.log
 .cache
 
 # Frameworks and Editors #
