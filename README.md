@@ -12,6 +12,7 @@
 * Token based authentication via [`passport`](http://passportjs.org/) and [`jsonwebtoken`](https://github.com/auth0/node-jsonwebtoken)
 * Tests and coverage with [Jest](https://facebook.github.io/jest/)
 * [Docker](https://www.docker.com/) compose/swarm ready
+* Develop on MacOS/Linux/Windows
 
 ### More greatness
 

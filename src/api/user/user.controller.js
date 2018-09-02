@@ -10,7 +10,8 @@ module.exports = batchDispatch({
       .first()
       .where('username', req.body.username);
 
-    if (!user || !await user.isPassword(req.body.password)) {
+    // eslint-disable-next-line prettier/prettier
+    if (!user || !(await user.isPassword(req.body.password))) {
       throw new PublicError('Invalid username or password.', {
         type: ErrorTypes.Unauthorized
       });

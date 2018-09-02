@@ -1,6 +1,5 @@
-// npm i --save-dev eslint babel-eslint eslint-config-standard eslint-plugin-import eslint-plugin-jest eslint-plugin-node eslint-plugin-promise eslint-plugin-standard prettier eslint-config-prettier eslint-plugin-prettier
-
 module.exports = {
+  root: true,
   parser: 'babel-eslint',
   extends: ['standard', 'prettier'],
   env: {
@@ -10,10 +9,24 @@ module.exports = {
   parserOptions: {
     impliedStrict: true
   },
-  plugins: ['prettier', 'jest'],
+  plugins: ['prettier', 'jest', 'import', 'babel'],
   globals: {},
   rules: {
-    'prettier/prettier': [2, require('./.prettierrc')],
-    'no-console': 1
+    'no-warning-comments': [
+      1,
+      { terms: ['xxx', 'fixme', 'todo', 'refactor'], location: 'start' }
+    ],
+    'no-console': 1,
+    // eslint-plugin-babel
+    'babel/no-invalid-this': 1,
+    'babel/semi': 1,
+    // Prettier
+    'prettier/prettier': [2, require('./.prettierrc')]
+  },
+  settings: {
+    // babel-plugin-module-resolver
+    'import/resolver': {
+      'babel-module': {}
+    }
   }
 };
