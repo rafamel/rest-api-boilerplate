@@ -1,7 +1,7 @@
 import path from 'path';
 import Model from '~/db/Model';
 import beforeUnique from 'objection-before-and-unique';
-import PublicError, { ErrorTypes } from '~/utils/public-error';
+import PublicError, { ErrorTypes } from 'public-error';
 
 export default class Todo extends beforeUnique({
   unique: [{ col: 'name', label: 'Name', insensitive: true, for: ['user_id'] }]

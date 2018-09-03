@@ -1,5 +1,5 @@
-import route from '~/utils/route';
-import authorize from '~/middlewares/authorize';
+import route from 'route';
+import authorize from '#/authorize';
 import validate from './todo.validation';
 import controller from './todo.controller';
 

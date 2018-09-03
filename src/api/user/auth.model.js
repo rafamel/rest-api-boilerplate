@@ -1,6 +1,6 @@
 import path from 'path';
 import Model from '~/db/Model';
-import PublicError, { ErrorTypes } from '~/utils/public-error';
+import PublicError, { ErrorTypes } from 'public-error';
 import ms from 'ms';
 import moment from 'moment';
 import crypto from 'crypto';

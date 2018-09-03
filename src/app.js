@@ -4,7 +4,7 @@ import compress from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
 import config from 'config';
-import logger, { morgan } from '~/utils/logger';
+import logger, { morgan } from 'logger';
 
 // App specific
 import db from '~/db';

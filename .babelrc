@@ -13,8 +13,12 @@
     [
       "module-resolver",
       {
+        "root": [
+          "./src/lib"
+        ],
         "alias": {
-          "~": "./src"
+          "~": "./src",
+          "#": "./src/middlewares"
         }
       }
     ],

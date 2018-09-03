@@ -1,5 +1,5 @@
 import path from 'path';
-import Joi from '~/utils/joi';
+import Joi from 'joi';
 import Model from '~/db/Model';
 import beforeUnique from 'objection-before-and-unique';
 import { promisify } from 'util';

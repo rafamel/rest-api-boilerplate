@@ -1,4 +1,4 @@
-import Joi from '~/utils/joi';
+import Joi from 'joi';
 import { RequestValidation, ValidationSchema } from 'request-validation';
 
 const schema = new ValidationSchema({

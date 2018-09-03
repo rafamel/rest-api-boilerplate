@@ -1,6 +1,6 @@
-import route from '~/utils/route';
-import PublicError, { ErrorTypes } from '~/utils/public-error';
-import authorize from '~/middlewares/authorize';
+import route from 'route';
+import PublicError, { ErrorTypes } from 'public-error';
+import authorize from '#/authorize';
 import validate from './user.validation';
 import controller from './user.controller';
 

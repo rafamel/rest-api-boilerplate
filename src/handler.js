@@ -1,6 +1,6 @@
-import PublicError, { ErrorTypes } from '~/utils/public-error';
+import PublicError, { ErrorTypes } from 'public-error';
 import { Model } from 'objection';
-import logger from '~/utils/logger';
+import logger from 'logger';
 import config from 'config';
 
 const { ValidationError, NotFoundError } = Model;

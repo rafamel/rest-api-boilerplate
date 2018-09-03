@@ -1,5 +1,5 @@
-import PublicError, { ErrorTypes } from '~/utils/public-error';
-import { batchDispatch } from '~/middlewares/dispatch';
+import PublicError, { ErrorTypes } from 'public-error';
+import { batchDispatch } from 'dispatch';
 import Auth from './auth.model';
 import User from './user.model';
 

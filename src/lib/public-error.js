@@ -1,4 +1,4 @@
-import Joi from '~/utils/joi';
+import Joi from 'joi';
 import config from 'config';
 
 const validation = config.get('validation');

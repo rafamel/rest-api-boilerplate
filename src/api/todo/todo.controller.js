@@ -1,4 +1,4 @@
-import { batchDispatch } from '~/middlewares/dispatch';
+import { batchDispatch } from 'dispatch';
 import Todo from './todo.model';
 
 // index, show, create, update, patch, delete

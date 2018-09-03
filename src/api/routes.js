@@ -1,4 +1,4 @@
-import route from '~/utils/route';
+import route from 'route';
 import user from './user';
 import todo from './todo';
 

@@ -1,5 +1,5 @@
 import { Model, AjvValidator } from 'objection';
-import PublicError, { ErrorTypes } from '~/utils/public-error';
+import PublicError, { ErrorTypes } from 'public-error';
 import config from 'config';
 
 const production = config.get('production');

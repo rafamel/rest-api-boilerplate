@@ -1,4 +1,4 @@
-import PublicError, { ErrorTypes } from '~/utils/public-error';
+import PublicError, { ErrorTypes } from 'public-error';
 import passport from 'passport';
 import User from '~/api/user/user.model';
 
