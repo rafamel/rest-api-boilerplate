@@ -1,6 +1,6 @@
 import path from 'path';
 import Model from '~/db/Model';
-import PublicError, { ErrorTypes } from 'public-error';
+import { PublicError, ErrorTypes } from 'ponds';
 import ms from 'ms';
 import moment from 'moment';
 import crypto from 'crypto';
@@ -58,9 +58,7 @@ export default class RefreshToken extends Model {
         const [id, token] = fullToken.split('.');
         const dbToken = await this.query().findById(id);
         if (!dbToken || dbToken.token !== token) {
-          throw new PublicError('Invalid token', {
-            type: ErrorTypes.Unauthorized
-          });
+          throw new PublicError(ErrorTypes.Unauthorized);
         }
         return dbToken;
       }
@@ -75,14 +73,14 @@ export default class RefreshToken extends Model {
   async runChecks(user) {
     // Check user id
     if (!user || this.user_id !== user.id) {
-      throw new PublicError('Invalid token', { type: ErrorTypes.Unauthorized });
+      throw new PublicError(ErrorTypes.Unauthorized, { info: 'Invalid token' });
     }
 
     // Check expiration
     const expiry = moment(this.expires);
     const currentUnix = moment().unix();
     if (currentUnix > expiry.unix()) {
-      throw new PublicError('Invalid token', { type: ErrorTypes.Unauthorized });
+      throw new PublicError(ErrorTypes.Unauthorized, { info: 'Invalid token' });
     }
 
     // Create new refreshToken if needed

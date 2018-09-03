@@ -1,7 +1,7 @@
 import path from 'path';
 import Model from '~/db/Model';
 import beforeUnique from 'objection-before-and-unique';
-import PublicError, { ErrorTypes } from 'public-error';
+import { PublicError, ErrorTypes } from 'ponds';
 
 export default class Todo extends beforeUnique({
   unique: [{ col: 'name', label: 'Name', insensitive: true, for: ['user_id'] }]
@@ -36,9 +36,7 @@ export default class Todo extends beforeUnique({
   // Instance Methods
   assertOwner(user) {
     if (this.user_id !== user.id) {
-      throw new PublicError(`You don't have access to this resource.`, {
-        type: ErrorTypes.Unauthorized
-      });
+      throw new PublicError(ErrorTypes.Unauthorized);
     }
     return this;
   }

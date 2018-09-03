@@ -1,19 +1,18 @@
-import PublicError, { ErrorTypes } from 'public-error';
-import { batchDispatch } from 'dispatch';
+import { dispatch, PublicError, ErrorTypes } from 'ponds';
 import Auth from './auth.model';
 import User from './user.model';
 
 // index, show, create, update, patch, delete
-export default batchDispatch({
+export default dispatch.all({
   async login(req) {
     const user = await User.query()
       .first()
       .where('username', req.body.username);
 
     // eslint-disable-next-line prettier/prettier
-    if (!user || !(await user.isPassword(req.body.password))) {
-      throw new PublicError('Invalid username or password.', {
-        type: ErrorTypes.Unauthorized
+    if (!user || !await user.isPassword(req.body.password)) {
+      throw new PublicError(ErrorTypes.Unauthorized, {
+        info: 'Invalid username or password'
       });
     }
 

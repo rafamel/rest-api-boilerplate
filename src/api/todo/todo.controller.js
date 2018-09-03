@@ -1,8 +1,8 @@
-import { batchDispatch } from 'dispatch';
+import { dispatch } from 'ponds';
 import Todo from './todo.model';
 
 // index, show, create, update, patch, delete
-export default batchDispatch({
+export default dispatch.all({
   async index(req) {
     return Todo.query().where('user_id', req.user.id);
   },

@@ -1,4 +1,4 @@
-import PublicError, { ErrorTypes } from 'public-error';
+import { PublicError, ErrorTypes } from 'ponds';
 import passport from 'passport';
 import User from '~/api/user/user.model';
 
@@ -16,19 +16,22 @@ export default function authorize(role = 0) {
       async (err, user, info) => {
         if (err) {
           return next(
-            new PublicError('Error retrieving user data.', { err: err })
+            new PublicError(null, {
+              info: 'Error retrieving user data.',
+              err: err
+            })
           );
         }
         const noAccess = () =>
-          new PublicError("You don't have access to this resource.", {
-            type: ErrorTypes.Unauthorized,
+          new PublicError(ErrorTypes.Unauthorized, {
+            info: "You don't have access to this resource.",
             err: info
           });
         if (!user) {
           return info && info.name === 'TokenExpiredError'
             ? next(
-                new PublicError('Access Token has expired.', {
-                  type: ErrorTypes.Unauthorized,
+                new PublicError(ErrorTypes.Unauthorized, {
+                  info: 'Access Token has expired.',
                   err: info
                 })
               )

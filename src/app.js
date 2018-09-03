@@ -5,13 +5,14 @@ import helmet from 'helmet';
 import cors from 'cors';
 import config from 'config';
 import logger, { morgan } from 'logger';
+import ponds from 'ponds';
 
 // App specific
-import db from '~/db';
-import setPassport from '~/passport';
+import './ponds'; // Set up ponds
+import './db'; // Connect db
+import setPassport from './passport';
 import rv from 'request-validation';
-import routes from '~/api/routes';
-import handler from '~/handler';
+import routes from './api/routes';
 
 // Get config
 const port = config.get('port');
@@ -30,14 +31,12 @@ app.use(bodyParser.json()); // Parse JSON
 app.use(bodyParser.urlencoded({ extended: false })); // Parse urlencoded
 
 // Prepare
-db.connect(); // Knex & Objection.js database connection
 setPassport(app); // Passport
 rv.options({ defaults: validation });
 
 // Routes
-const use = handler(app);
-use.api('/api', routes);
-use.default(); // Default handler for other routes
+app.use('/api', routes, ponds.get('api'));
+app.use(ponds.get('default')); // Default handler for other routes
 
 app.listen(port, () => {
   const env = process.env.NODE_ENV

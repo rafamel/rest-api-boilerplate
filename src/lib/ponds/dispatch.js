@@ -8,12 +8,12 @@ function dispatch(cb) {
   };
 }
 
-function batchDispatch(obj) {
+dispatch.all = function dispatchAll(obj) {
   Object.keys(obj).forEach((key) => {
     const cb = obj[key];
     obj[key] = dispatch(cb);
   });
   return obj;
-}
+};
 
-export { dispatch, batchDispatch };
+export default dispatch;
