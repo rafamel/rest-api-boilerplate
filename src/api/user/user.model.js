@@ -1,15 +1,17 @@
-const path = require('path');
-const Joi = require('~/utils/joi');
-const Model = require('~/db/Model');
-const beforeUnique = require('objection-before-and-unique');
-const { promisify } = require('util');
-const bcrypt = require('bcrypt-nodejs');
+import path from 'path';
+import Joi from '~/utils/joi';
+import Model from '~/db/Model';
+import beforeUnique from 'objection-before-and-unique';
+import { promisify } from 'util';
+import bcrypt from 'bcrypt-nodejs';
+import config from 'config';
+
 const genSaltAsync = promisify(bcrypt.genSalt);
 const hashAsync = promisify(bcrypt.hash);
 const compareAsync = promisify(bcrypt.compare);
-const auth = require('config').get('auth');
+const auth = config.get('auth');
 
-module.exports = class User extends beforeUnique({
+export default class User extends beforeUnique({
   before: [
     async ({ instance }) => {
       if (instance.password) {
@@ -78,4 +80,4 @@ module.exports = class User extends beforeUnique({
   isPassword(password) {
     return compareAsync(password, this.hash);
   }
-};
+}

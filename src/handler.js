@@ -1,8 +1,10 @@
-const { PublicError, ErrorTypes } = require('./utils/public-error');
-const { ValidationError, NotFoundError } = require('objection').Model;
-const logger = require('~/utils/logger');
-const production = require('config').get('production');
+import PublicError, { ErrorTypes } from '~/utils/public-error';
+import { Model } from 'objection';
+import logger from '~/utils/logger';
+import config from 'config';
 
+const { ValidationError, NotFoundError } = Model;
+const production = config.get('production');
 const schemes = {
   default: {
     data(req, res, data) {
@@ -117,10 +119,10 @@ function handler(appOrRouter, scheme) {
   };
 }
 
-module.exports = (appOrRouter) => {
+export default function(appOrRouter) {
   const handlers = {};
   Object.keys(schemes).forEach((key) => {
     handlers[key] = handler(appOrRouter, schemes[key]);
   });
   return handlers;
-};
+}

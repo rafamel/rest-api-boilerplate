@@ -1,6 +1,8 @@
-const router = require('express').Router();
+import route from '~/utils/route';
+import user from './user';
+import todo from './todo';
 
-router.use('/user', require('./user/user.routes'));
-router.use('/todo', require('./todo/todo.routes'));
-
-module.exports = router;
+export default route((router) => {
+  router.use('/user', user.routes);
+  router.use('/todo', todo.routes);
+});

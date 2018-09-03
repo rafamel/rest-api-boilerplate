@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 COPY ./* /usr/src/app/
 
 RUN npm install --only-production
-RUN npm cache clean
+RUN npm cache clean --force
 RUN mkdir logs
 RUN chown node: logs
 

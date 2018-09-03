@@ -16,7 +16,4 @@ function batchDispatch(obj) {
   return obj;
 }
 
-module.exports = {
-  dispatch,
-  batchDispatch
-};
+export { dispatch, batchDispatch };

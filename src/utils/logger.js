@@ -1,7 +1,7 @@
-const morgan = require('morgan');
-const winston = require('winston');
-const moment = require('moment');
-const config = require('config');
+import morgan from 'morgan';
+import winston from 'winston';
+import moment from 'moment';
+import config from 'config';
 
 const logs = config.get('logs');
 const production = config.get('production');
@@ -38,5 +38,4 @@ const morganLogger = (on, level) => {
   });
 };
 
-module.exports = logger;
-module.exports.morgan = morganLogger;
+export { logger as default, morganLogger as morgan };

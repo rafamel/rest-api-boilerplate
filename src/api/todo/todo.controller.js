@@ -1,8 +1,8 @@
-const { batchDispatch } = require('~/middlewares/dispatch');
-const Todo = require('./todo.model');
+import { batchDispatch } from '~/middlewares/dispatch';
+import Todo from './todo.model';
 
 // index, show, create, update, patch, delete
-module.exports = batchDispatch({
+export default batchDispatch({
   async index(req) {
     return Todo.query().where('user_id', req.user.id);
   },

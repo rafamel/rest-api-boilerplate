@@ -78,7 +78,7 @@ registerSx({
         .filter((x) => x && x[0] !== '#')
     };
     fs.writeFileSync(
-      path.join(__dirname, 'captain-defition'),
+      path.join(__dirname, 'captain-definition'),
       JSON.stringify(captain, null, 2)
     );
   }

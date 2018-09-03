@@ -1,10 +1,10 @@
-const { PublicError, ErrorTypes } = require('~/utils/public-error');
-const { batchDispatch } = require('~/middlewares/dispatch');
-const Auth = require('./auth.model');
-const User = require('./user.model');
+import PublicError, { ErrorTypes } from '~/utils/public-error';
+import { batchDispatch } from '~/middlewares/dispatch';
+import Auth from './auth.model';
+import User from './user.model';
 
 // index, show, create, update, patch, delete
-module.exports = batchDispatch({
+export default batchDispatch({
   async login(req) {
     const user = await User.query()
       .first()

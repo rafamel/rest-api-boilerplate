@@ -1,8 +1,8 @@
-const router = require('express').Router();
-const { PublicError, ErrorTypes } = require('~/utils/public-error');
-const { authorize } = require('~/middlewares/authorize');
-const validate = require('./user.validation');
-const controller = require('./user.controller');
+import route from '~/utils/route';
+import PublicError, { ErrorTypes } from '~/utils/public-error';
+import authorize from '~/middlewares/authorize';
+import validate from './user.validation';
+import controller from './user.controller';
 
 const verifyUser = (req, res, next) => {
   if (req.user.id !== Number(req.params.id)) {
@@ -16,15 +16,21 @@ const verifyUser = (req, res, next) => {
 };
 
 // User - /user
-router.post('/register', validate.register, controller.register);
-router.post('/login', validate.login, controller.login);
-router.post('/refresh', validate.refresh, controller.refresh);
+export default route((router) => {
+  router.post('/register', validate.register, controller.register);
+  router.post('/login', validate.login, controller.login);
+  router.post('/refresh', validate.refresh, controller.refresh);
 
-router.get('/:id', authorize(), verifyUser, controller.show);
-router.patch('/:id', validate.patch, authorize(), verifyUser, controller.patch);
-router.delete('/:id', authorize(), verifyUser, controller.delete);
-
-module.exports = router;
+  router.get('/:id', authorize(), verifyUser, controller.show);
+  router.patch(
+    '/:id',
+    validate.patch,
+    authorize(),
+    verifyUser,
+    controller.patch
+  );
+  router.delete('/:id', authorize(), verifyUser, controller.delete);
+});
 
 /*  // Routes example
     router.get('/api/example', ExampleController.index);

@@ -1,17 +1,17 @@
-const router = require('express').Router();
-const { authorize } = require('~/middlewares/authorize');
-const validate = require('./todo.validation');
-const controller = require('./todo.controller');
+import route from '~/utils/route';
+import authorize from '~/middlewares/authorize';
+import validate from './todo.validation';
+import controller from './todo.controller';
 
 // Auth - /auth
-router.get('/', authorize(), controller.index);
-router.get('/:id', authorize(), controller.show);
-router.post('/', validate.create, authorize(), controller.create);
-router.put('/:id', validate.update, authorize(), controller.update);
-router.patch('/:id', validate.patch, authorize(), controller.patch);
-router.delete('/:id', authorize(), controller.delete);
-
-module.exports = router;
+export default route((router) => {
+  router.get('/', authorize(), controller.index);
+  router.get('/:id', authorize(), controller.show);
+  router.post('/', validate.create, authorize(), controller.create);
+  router.put('/:id', validate.update, authorize(), controller.update);
+  router.patch('/:id', validate.patch, authorize(), controller.patch);
+  router.delete('/:id', authorize(), controller.delete);
+});
 
 /*  // Routes example
     router.get('/api/example', ExampleController.index);

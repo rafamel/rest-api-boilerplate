@@ -1,4 +1,4 @@
-const baseJoi = require('joi');
-const joiAdd = require('joi-add');
+import baseJoi from 'joi';
+import joiAdd from 'joi-add';
 
-module.exports = joiAdd(baseJoi);
+export default joiAdd(baseJoi);

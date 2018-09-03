@@ -1,6 +1,7 @@
-const Joi = require('~/utils/joi');
-const validation = require('config').get('validation');
+import Joi from '~/utils/joi';
+import config from 'config';
 
+const validation = config.get('validation');
 class ErrorType {
   constructor(name, status) {
     // Validate input
@@ -60,7 +61,4 @@ class PublicError extends Error {
   }
 }
 
-module.exports = {
-  PublicError,
-  ErrorTypes
-};
+export { PublicError as default, ErrorTypes };

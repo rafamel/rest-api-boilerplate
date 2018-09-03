@@ -1,5 +1,5 @@
-const Joi = require('joi-add')();
-const { RequestValidation, ValidationSchema } = require('request-validation');
+import Joi from '~/utils/joi';
+import { RequestValidation, ValidationSchema } from 'request-validation';
 
 const schema = new ValidationSchema({
   body: {
@@ -33,7 +33,7 @@ const schema = new ValidationSchema({
   }
 });
 
-module.exports = new RequestValidation({
+export default new RequestValidation({
   register: schema
     .useBody('username', 'password', 'email')
     .presence('required'),

@@ -1,7 +1,8 @@
-const { Model, AjvValidator } = require('objection');
-const { PublicError, ErrorTypes } = require('~/utils/public-error');
-const production = require('config').get('production');
+import { Model, AjvValidator } from 'objection';
+import PublicError, { ErrorTypes } from '~/utils/public-error';
+import config from 'config';
 
+const production = config.get('production');
 class ParentQueryBuilder extends Model.QueryBuilder {
   notNone(label = 'Item') {
     return this.runAfter((res, builder) => {
@@ -20,7 +21,7 @@ class ParentQueryBuilder extends Model.QueryBuilder {
   }
 }
 
-class ParentModel extends Model {
+export default class ParentModel extends Model {
   static QueryBuilder = ParentQueryBuilder;
 
   static createValidator() {
@@ -49,5 +50,3 @@ class ParentModel extends Model {
     });
   }
 }
-
-module.exports = ParentModel;

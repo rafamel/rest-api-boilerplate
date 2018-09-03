@@ -1,5 +1,5 @@
-const Joi = require('joi-add')();
-const { RequestValidation, ValidationSchema } = require('request-validation');
+import Joi from '~/utils/joi';
+import { RequestValidation, ValidationSchema } from 'request-validation';
 
 const schema = new ValidationSchema({
   body: {
