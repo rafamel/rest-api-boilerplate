@@ -1,17 +1,23 @@
 const path = require('path');
 const dotEnv = require('dotenv');
+const env = ((e = process.env.NODE_ENV) =>
+  e === 'production' || e === 'test' ? e : 'development')();
 const requiredEnv = (arr) => {
   if (!arr.filter((x) => !process.env[x]).length) return;
   throw Error(`Required environment variables: ${arr.join(', ')}`);
 };
 
-// Get env variables from .env file
+// Retrieve env file variables
 dotEnv.config({ path: path.join(__dirname, '../.env') });
-
 // Set env variables as required
 requiredEnv(['DB_URL', 'JWT_SECRET']);
+
 module.exports = {
-  production: process.env.NODE_ENV === 'production',
+  env: {
+    production: env === 'production',
+    development: env === 'development',
+    test: env === 'test'
+  },
   port: process.env.PORT || 80,
   logs: {
     morgan: 'combined',

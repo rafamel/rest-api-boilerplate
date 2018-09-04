@@ -26,7 +26,7 @@ ponds.set('api', {
 
 // Errors transform
 const { ValidationError, NotFoundError } = Model;
-const production = config.get('production');
+const production = config.get('env.production');
 ponds.transform({
   error(err) {
     err = (() => {

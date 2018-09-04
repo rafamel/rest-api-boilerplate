@@ -4,7 +4,7 @@ import moment from 'moment';
 import config from 'config';
 
 const logs = config.get('logs');
-const production = config.get('production');
+const production = config.get('env.production');
 
 const transports = {
   console: new winston.transports.Console({

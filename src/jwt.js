@@ -1,4 +1,3 @@
-import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import config from 'config';
 
@@ -13,12 +12,7 @@ const jwtOptions = {
     maxAge: auth.jwtAuthExpiry
   }
 };
-const jwt = new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
+export default new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
   // Todo run user schema validation
   return done(null, jwtPayload.user);
 });
-
-export default function setPassport(app) {
-  app.use(passport.initialize());
-  passport.use('jwt', jwt);
-}

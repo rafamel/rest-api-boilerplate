@@ -2,7 +2,7 @@ import { Model, AjvValidator } from 'objection';
 import { PublicError, ErrorTypes } from 'ponds';
 import config from 'config';
 
-const production = config.get('production');
+const production = config.get('env.production');
 class ParentQueryBuilder extends Model.QueryBuilder {
   notNone(label = 'Item') {
     return this.runAfter((res, builder) => {

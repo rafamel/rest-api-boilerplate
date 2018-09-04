@@ -10,7 +10,7 @@ export default dispatch.all({
       .where('username', req.body.username);
 
     // eslint-disable-next-line prettier/prettier
-    if (!user || !await user.isPassword(req.body.password)) {
+    if (!user || !(await user.isPassword(req.body.password))) {
       throw new PublicError(ErrorTypes.Unauthorized, {
         info: 'Invalid username or password'
       });
