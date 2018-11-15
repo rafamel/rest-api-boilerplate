@@ -1,12 +1,12 @@
 import route from 'route';
-import { PublicError, ErrorTypes } from 'ponds';
+import { PublicError, errors } from 'ponds';
 import authorize from '#/authorize';
 import validate from './user.validation';
 import controller from './user.controller';
 
 const verifyUser = (req, res, next) => {
   if (req.user.id !== Number(req.params.id)) {
-    return next(new PublicError(ErrorTypes.Unauthorized));
+    return next(new PublicError(errors.Unauthorized));
   }
   next();
 };

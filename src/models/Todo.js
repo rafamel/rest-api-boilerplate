@@ -1,7 +1,7 @@
 import path from 'path';
 import Model from '~/db/Model';
 import beforeUnique from 'objection-before-and-unique';
-import { PublicError, ErrorTypes } from 'ponds';
+import { PublicError, errors } from 'ponds';
 
 export default class Todo extends beforeUnique({
   unique: [{ col: 'name', label: 'Name', insensitive: true, for: ['user_id'] }]
@@ -25,7 +25,7 @@ export default class Todo extends beforeUnique({
   static relationMappings = {
     user: {
       relation: Model.BelongsToOneRelation,
-      modelClass: path.join(__dirname, '../user/user.model'),
+      modelClass: path.join(__dirname, 'User'),
       join: {
         from: 'todo.user_id',
         to: 'users.id'
@@ -36,7 +36,7 @@ export default class Todo extends beforeUnique({
   // Instance Methods
   assertOwner(user) {
     if (this.user_id !== user.id) {
-      throw new PublicError(ErrorTypes.Unauthorized);
+      throw new PublicError(errors.Unauthorized);
     }
     return this;
   }

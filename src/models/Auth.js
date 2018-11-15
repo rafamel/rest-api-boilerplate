@@ -1,11 +1,11 @@
 import path from 'path';
 import Model from '~/db/Model';
-import { PublicError, ErrorTypes } from 'ponds';
+import { PublicError, errors } from 'ponds';
 import ms from 'ms';
 import moment from 'moment';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import config from 'config';
+import config from '~/config';
 
 const auth = config.get('auth');
 export default class RefreshToken extends Model {
@@ -28,7 +28,7 @@ export default class RefreshToken extends Model {
   static relationMappings = {
     user: {
       relation: Model.BelongsToOneRelation,
-      modelClass: path.join(__dirname, 'user.model'),
+      modelClass: path.join(__dirname, 'User'),
       join: {
         from: 'refresh_token.user_id',
         to: 'users.id'
@@ -58,7 +58,7 @@ export default class RefreshToken extends Model {
         const [id, token] = fullToken.split('.');
         const dbToken = await this.query().findById(id);
         if (!dbToken || dbToken.token !== token) {
-          throw new PublicError(ErrorTypes.Unauthorized);
+          throw new PublicError(errors.Unauthorized);
         }
         return dbToken;
       }
@@ -73,14 +73,14 @@ export default class RefreshToken extends Model {
   async runChecks(user) {
     // Check user id
     if (!user || this.user_id !== user.id) {
-      throw new PublicError(ErrorTypes.Unauthorized, { info: 'Invalid token' });
+      throw new PublicError(errors.Unauthorized, { info: 'Invalid token' });
     }
 
     // Check expiration
     const expiry = moment(this.expires);
     const currentUnix = moment().unix();
     if (currentUnix > expiry.unix()) {
-      throw new PublicError(ErrorTypes.Unauthorized, { info: 'Invalid token' });
+      throw new PublicError(errors.Unauthorized, { info: 'Invalid token' });
     }
 
     // Create new refreshToken if needed

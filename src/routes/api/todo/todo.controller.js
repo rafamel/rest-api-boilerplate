@@ -1,5 +1,5 @@
 import { dispatch } from 'ponds';
-import Todo from './todo.model';
+import Todo from '~/models/Todo';
 
 // index, show, create, update, patch, delete
 export default dispatch.all({

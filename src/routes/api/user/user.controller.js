@@ -1,6 +1,6 @@
-import { dispatch, PublicError, ErrorTypes } from 'ponds';
-import Auth from './auth.model';
-import User from './user.model';
+import { dispatch, PublicError, errors } from 'ponds';
+import Auth from '~/models/AUth';
+import User from '~/models/User';
 
 // index, show, create, update, patch, delete
 export default dispatch.all({
@@ -11,7 +11,7 @@ export default dispatch.all({
 
     // eslint-disable-next-line prettier/prettier
     if (!user || !(await user.isPassword(req.body.password))) {
-      throw new PublicError(ErrorTypes.Unauthorized, {
+      throw new PublicError(errors.Unauthorized, {
         info: 'Invalid username or password'
       });
     }

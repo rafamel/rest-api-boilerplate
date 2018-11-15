@@ -4,7 +4,7 @@ import Model from '~/db/Model';
 import beforeUnique from 'objection-before-and-unique';
 import { promisify } from 'util';
 import bcrypt from 'bcrypt-nodejs';
-import config from 'config';
+import config from '~/config';
 
 const genSaltAsync = promisify(bcrypt.genSalt);
 const hashAsync = promisify(bcrypt.hash);
@@ -60,7 +60,7 @@ export default class User extends beforeUnique({
   static relationMappings = {
     refreshTokens: {
       relation: Model.HasManyRelation,
-      modelClass: path.join(__dirname, 'auth.model'),
+      modelClass: path.join(__dirname, 'Auth'),
       join: {
         from: 'users.id',
         to: 'refresh_token.user_id'
@@ -68,7 +68,7 @@ export default class User extends beforeUnique({
     },
     todos: {
       relation: Model.HasManyRelation,
-      modelClass: path.join(__dirname, '../todo/todo.model'),
+      modelClass: path.join(__dirname, 'Todo'),
       join: {
         from: 'users.id',
         to: 'todo.user_id'
