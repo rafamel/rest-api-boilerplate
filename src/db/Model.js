@@ -1,13 +1,13 @@
 import { Model, AjvValidator } from 'objection';
-import { PublicError, ErrorTypes } from 'ponds';
-import config from 'config';
+import { PublicError, errors } from 'ponds';
+import config from '~/config';
 
 const production = config.get('env.production');
 class ParentQueryBuilder extends Model.QueryBuilder {
   notNone(label = 'Item') {
     return this.runAfter((res, builder) => {
       const thrower = () => {
-        throw new PublicError(ErrorTypes.DatabaseNotFound, {
+        throw new PublicError(errors.DatabaseNotFound, {
           info: `${label} not found.`
         });
       };

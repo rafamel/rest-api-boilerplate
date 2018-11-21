@@ -3,9 +3,7 @@ import bodyParser from 'body-parser';
 import compress from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
-import config from 'config';
 import logger, { morgan } from 'logger';
-import ponds from 'ponds';
 import passport from 'passport';
 
 // App specific
@@ -13,7 +11,8 @@ import './ponds'; // Set up ponds
 import './db'; // Connect db
 import rv from 'request-validation';
 import jwt from './jwt';
-import routes from './api/routes';
+import routes from './routes';
+import config from './config';
 
 // Get config
 const port = config.get('port');
@@ -37,12 +36,8 @@ app.use(passport.initialize());
 passport.use('jwt', jwt);
 
 // Routes
-app.use('/api', routes, ponds.get('api'));
-app.use(ponds.get('default')); // Default handler for other routes
+app.use(routes);
 
 app.listen(port, () => {
-  const env = Object.entries(config.env).reduce(
-    (acc, [key, value]) => (value ? key[0].toUpperCase() + key.slice(1) : acc)
-  );
-  logger.info(`${env} server running on port ${port}`);
+  logger.info(`Server running on port ${port}`);
 });
