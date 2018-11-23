@@ -37,6 +37,7 @@ export default class RefreshToken extends Model {
   };
 
   // Class Methods
+  // TODO class methods to top
   static get method() {
     return {
       create: async (user) => {

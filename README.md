@@ -26,8 +26,8 @@
 * Environment configuration via [`dotenv`](https://github.com/motdotla/dotenv) and [`node-config`](https://github.com/lorenwest/node-config)
 * Ad-hoc simple error handling
 
-## Todo
+## TODO
 
+* [JSON API](https://jsonapi.org/format/)
 * E2E tests, CI
 * Documentation
-* Localization

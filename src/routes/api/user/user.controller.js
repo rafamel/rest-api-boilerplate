@@ -1,5 +1,5 @@
 import { dispatch, PublicError, errors } from 'ponds';
-import Auth from '~/models/AUth';
+import Auth from '~/models/Auth';
 import User from '~/models/User';
 
 // index, show, create, update, patch, delete

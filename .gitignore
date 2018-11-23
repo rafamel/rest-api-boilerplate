@@ -15,6 +15,7 @@ coverage
 node_modules
 npm-debug.log
 .cache
+package-lock.json
 
 # Frameworks and Editors #
 ##########################

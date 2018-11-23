@@ -14,7 +14,9 @@ export default dispatch.all({
   },
   async create(req) {
     req.body.user_id = req.user.id;
-    return Todo.query().insert(req.body);
+    return Todo.query()
+      .insert(req.body)
+      .returning('*');
   },
   async update(req) {
     req.body.user_id = req.user.id;
