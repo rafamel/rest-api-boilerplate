@@ -1,7 +1,7 @@
 import morgan from 'morgan';
 import winston from 'winston';
 import moment from 'moment';
-import config from 'config';
+import config from '~/config';
 
 const logs = config.get('logs');
 const production = config.get('env.production');

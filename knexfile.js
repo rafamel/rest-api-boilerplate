@@ -1,2 +1,2 @@
 require('babel-register');
-module.exports = require('config').get('db');
+module.exports = require('./src/config').default.get('db');

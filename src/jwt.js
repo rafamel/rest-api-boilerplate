@@ -1,5 +1,5 @@
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import config from 'config';
+import config from '~/config';
 
 const auth = config.get('auth');
 // JSONWebTokens
