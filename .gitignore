@@ -1,5 +1,6 @@
 # Project Specific #
 ####################
+/docs
 /logs
 
 # Node and common setups #

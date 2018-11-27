@@ -28,7 +28,7 @@ app.use(cors()); // Enable CORS
 app.use(helmet()); // Secure headers
 app.use(compress()); // Gzip compression
 app.use(bodyParser.json()); // Parse JSON
-app.use(bodyParser.urlencoded({ extended: false })); // Parse urlencoded
+// app.use(bodyParser.urlencoded({ extended: false })); // Parse urlencoded
 
 // Prepare
 rv.options({ defaults: validation });
@@ -38,6 +38,6 @@ passport.use('jwt', jwt);
 // Routes
 app.use(routes);
 
-app.listen(port, () => {
+export default app.listen(port, () => {
   logger.info(`Server running on port ${port}`);
 });
