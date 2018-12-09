@@ -1,37 +1,16 @@
 {
-  "presets": [
-    [
-      "env",
-      {
-        "targets": {
-          "node": "current"
-        }
-      }
-    ]
-  ],
+  "presets": [["@babel/preset-env", { "targets": { "node": "8.0.0" } }]],
   "plugins": [
     [
-      "module-resolver",
+      "babel-plugin-module-resolver",
       {
-        "root": [
-          "./src/lib"
-        ],
-        "alias": {
-          "~": "./src",
-          "#": "./src/middlewares"
-        }
+        "root": ["./src/lib"],
+        "alias": { "~": "./src", "#": "./src/middlewares" }
       }
     ],
-    "transform-decorators-legacy",
-    "transform-class-properties",
-    [
-      "transform-object-rest-spread",
-      {
-        "useBuiltIns": true
-      }
-    ]
+    ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": false }],
+    "@babel/plugin-proposal-class-properties",
+    ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }]
   ],
-  "ignore": [
-    "node_modules"
-  ]
+  "ignore": ["node_modules"]
 }

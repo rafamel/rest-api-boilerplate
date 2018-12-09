@@ -6,7 +6,7 @@ import config, { requireEnv } from 'slimconf';
 dotenv.config({ path: path.join(__dirname, '../.env') });
 
 // Set env variables as required
-requireEnv(['DB_URL', 'JWT_SECRET']);
+requireEnv('DB_URL', 'JWT_SECRET');
 
 const setup = {
   env: {
