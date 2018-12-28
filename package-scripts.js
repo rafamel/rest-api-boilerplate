@@ -11,7 +11,7 @@ module.exports = scripts({
   dev: {
     default: series([
       'nps private.run_common',
-      'onchange "./{src,config}/**/*" -i -- nps private.dev'
+      'onchange "./src/**/*" --initial --kill -- nps private.dev'
     ]),
     db: 'nps docker.dev.db'
   },
@@ -26,7 +26,7 @@ module.exports = scripts({
   },
   test: {
     default: 'cross-env NODE_ENV=test nps lint.test private.test',
-    watch: 'onchange "./test/**/*" -i -- nps private.test_watch'
+    watch: 'onchange "./test/**/*" --initial --kill -- nps private.test_watch'
   },
   validate: 'nps fix lint private.test private.validate_last',
   update: 'npm update --save/save-dev && npm outdated',
