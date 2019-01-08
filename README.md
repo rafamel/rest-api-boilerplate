@@ -2,29 +2,31 @@
 
 [![Version](https://img.shields.io/github/package-json/v/rafamel/rest-api-boilerplate.svg)](https://github.com/rafamel/rest-api-boilerplate) <!-- [![Build Status](https://travis-ci.org/rafamel/rest-api-boilerplate.svg)](https://travis-ci.org/rafamel/rest-api-boilerplate) [![Coverage](https://img.shields.io/coveralls/rafamel/rest-api-boilerplate.svg)](https://coveralls.io/github/rafamel/rest-api-boilerplate) --> [![Dependencies](https://david-dm.org/rafamel/rest-api-boilerplate/status.svg)](https://david-dm.org/rafamel/rest-api-boilerplate) [![License](https://img.shields.io/github/license/rafamel/rest-api-boilerplate.svg)](https://github.com/rafamel/rest-api-boilerplate/blob/master/LICENSE)
 
-**ES2017, Express, Postgress, Objection.js, tokens, and Docker.**
+<!-- markdownlint-disable MD036 -->
+**Express, Postgress, Objection.js, tokens, OpenAPI 3, Babel 7, Docker, and Jest**
+<!-- markdownlint-enable MD036 -->
 
 ## Stack
 
-* ES2017
 * [Express 4](https://expressjs.com/)
 * PostgreSQL & [Objection.js](https://github.com/vincit/objection.js) (ORM)
 * Token based authentication via [`passport`](http://passportjs.org/) and [`jsonwebtoken`](https://github.com/auth0/node-jsonwebtoken)
+* [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification) based validation via [`swagger-express-middleware`](https://github.com/APIDevTools/swagger-express-middleware), testing via [`oas-test`](https://github.com/rafamel/oas-test), and docs generation via [`redoc`](https://github.com/Rebilly/ReDoc) and [`widdershins`](https://github.com/mermade/widdershins)
 * Tests and coverage with [Jest](https://facebook.github.io/jest/)
+* [Babel 7](https://babeljs.io/) transpiling
 * [Docker](https://www.docker.com/) & [CaptainDuckDuck](https://captainduckduck.com) ready
 * Develop on MacOS/Linux/Windows
 
 ### More greatness
 
-* Validation via [`joi`](https://github.com/hapijs/joi/), [`joi-add`](https://github.com/rafamel/joi-add), and [`request-validation`](https://github.com/rafamel/request-validation)
 * [CORS](https://github.com/expressjs/cors) and [Gzip compression](https://github.com/expressjs/compression) enabled
 * HTTP headers security via [`helmet`](https://github.com/helmetjs/helmet)
 * Logging with [`morgan`](https://github.com/expressjs/morgan)
 * Git hooks with [`husky`](https://github.com/typicode/husky)
 * Monitoring with [`pm2`](https://github.com/Unitech/pm2)
 * Linting via [`eslint`](https://eslint.org/) and [`prettier`](https://prettier.io/)
-* Environment configuration via [`dotenv`](https://github.com/motdotla/dotenv) and [`node-config`](https://github.com/lorenwest/node-config)
-* Ad-hoc simple error handling
+* Environment configuration via [`dotenv`](https://github.com/motdotla/dotenv) and [`slimconf`](https://github.com/rafamel/slimconf)
+* Per-route data and error handling via [`ponds`](https://github.com/rafamel/ponds)
 
 ## TODO
 
