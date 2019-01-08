@@ -1,6 +1,6 @@
 # API Boilerplate
 
-[![Version](https://img.shields.io/github/package-json/v/rafamel/rest-api-boilerplate.svg)](https://github.com/rafamel/rest-api-boilerplate) <!-- [![Build Status](https://travis-ci.org/rafamel/rest-api-boilerplate.svg)](https://travis-ci.org/rafamel/rest-api-boilerplate) [![Coverage](https://img.shields.io/coveralls/rafamel/rest-api-boilerplate.svg)](https://coveralls.io/github/rafamel/rest-api-boilerplate) --> [![Dependencies](https://david-dm.org/rafamel/rest-api-boilerplate/status.svg)](https://david-dm.org/rafamel/rest-api-boilerplate) [![License](https://img.shields.io/github/license/rafamel/rest-api-boilerplate.svg)](https://github.com/rafamel/rest-api-boilerplate/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/rafamel/rest-api-boilerplate.svg)](https://github.com/rafamel/rest-api-boilerplate/blob/master/LICENSE)
 
 <!-- markdownlint-disable MD036 -->
 **Express, Postgress, Objection.js, tokens, OpenAPI 3, Babel 7, Docker, and Jest**
@@ -13,7 +13,7 @@
 * Token based authentication via [`passport`](http://passportjs.org/) and [`jsonwebtoken`](https://github.com/auth0/node-jsonwebtoken)
 * [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification) based validation via [`swagger-express-middleware`](https://github.com/APIDevTools/swagger-express-middleware), testing via [`oas-test`](https://github.com/rafamel/oas-test), and docs generation via [`redoc`](https://github.com/Rebilly/ReDoc) and [`widdershins`](https://github.com/mermade/widdershins)
 * Tests and coverage with [Jest](https://facebook.github.io/jest/)
-* [Babel 7](https://babeljs.io/) transpiling
+* [Babel 7](https://babeljs.io/) & TypeScript support
 * [Docker](https://www.docker.com/) & [CaptainDuckDuck](https://captainduckduck.com) ready
 * Develop on MacOS/Linux/Windows
 

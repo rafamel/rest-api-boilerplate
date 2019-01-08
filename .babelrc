@@ -1,11 +1,14 @@
 {
-  "presets": [["@babel/preset-env", { "targets": { "node": "8.0.0" } }]],
+  "presets": [
+    ["@babel/preset-env", { "targets": { "node": "8.0.0" } }],
+    "@babel/typescript"
+  ],
   "plugins": [
     [
       "babel-plugin-module-resolver",
       {
         "root": ["./src/lib"],
-        "alias": { "~": "./src", "#": "./src/middlewares" }
+        "alias": { "~": "./src" }
       }
     ],
     ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": false }],

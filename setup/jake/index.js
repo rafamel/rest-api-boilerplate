@@ -1,4 +1,4 @@
-require('@babel/register');
+require('../../register');
 const fs = require('fs');
 const path = require('path');
 

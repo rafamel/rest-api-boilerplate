@@ -17,7 +17,7 @@ task('dockerize', { async: true }, async (name, image, port, ...env) => {
           `docker run --name ${name}` +
           (port ? ' -p ' + port : '') +
           (env.length ? ' -e ' + env.join(',') : '') +
-          ` ${image} "cd /usr/src/app && node -e 'console.log(1000)'"`
+          ` -d ${image}`
       },
       {
         title: 'start',

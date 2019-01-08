@@ -1,7 +1,9 @@
+const globals = require('eslint-restricted-globals');
+
 module.exports = {
   root: true,
   parser: 'babel-eslint',
-  extends: ['standard', 'prettier'],
+  extends: ['standard', 'plugin:import/errors', 'prettier'],
   env: {
     node: true,
     jest: true
@@ -16,7 +18,9 @@ module.exports = {
       1,
       { terms: ['xxx', 'fixme', 'todo', 'refactor'], location: 'start' }
     ],
+    'no-unused-vars': 1, // Set as warning
     'no-console': 1,
+    'no-restricted-globals': [2, 'fetch'].concat(globals),
     // eslint-plugin-babel
     'babel/no-invalid-this': 1,
     'babel/semi': 1,
@@ -27,6 +31,10 @@ module.exports = {
     // babel-plugin-module-resolver
     'import/resolver': {
       'babel-module': {}
+    },
+    // eslint-import-resolver-typescript
+    'import/resolver': {
+      typescript: {}
     }
   }
 };
